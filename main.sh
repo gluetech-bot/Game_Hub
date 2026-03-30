@@ -1,3 +1,4 @@
+#chkusr() function checks if the entered user id is in the users.csv file.If not redirects to register function.
 chkusr() {
 if cut -d " " -f1 users.tsv| grep -q "$1"  ; then
     return 0 ;
@@ -11,7 +12,7 @@ if cut -d " " -f1 users.tsv| grep -q "$1"  ; then
     return 1 ;
   fi
 }
-
+#register() function creates new user and it's password and stores it in users.tsv,password is hashed.
 register() {
       read -p "Please enter new username : " newuser
       while true
@@ -29,7 +30,7 @@ register() {
       echo "$newuser is now registered"
       exit
 }
-
+#chkpass() function verifies the password entered.
 chkpass() {
 while true
 do
