@@ -1,2 +1,20 @@
-# Game_Hub
-Project for CS108(SSL) , Game hub for 2-player games
+# Mini Game Hub
+## CS108 Project , Spring 2025-26
+### Sree Vatsava Nalamara , Shanmukha Sai
+
+---
+
+## Introduction
+This report outlines the development process of the Mini Game Hub,consisting of two player games . It covers the hub's concept, design, implementation, and the
+challenges encountered during development. The report aims to provide a comprehensive overview that enables understanding and playing the games without direct access 
+to its source code.
+
+
+This is a secure, multi-user game hub that integrates Bash scripting for authentication and Python (Pygame) for gameplay. Two authenticated players select a game 
+from a menu, play via a graphical interface, and have their results recorded on a persistent leaderboard.
+
+---
+
+## Table of Contents
+1. [Introduction](https://github.com/gluetech-bot/Game_Hub/edit/main/README.md#introduction)
+2. []() 

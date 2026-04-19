@@ -9,7 +9,7 @@ else   read -p "This username doesn't exists . Do you want to register and updat
     return 1 ;
 fi
 }
-
+#register() function creates new user and it's password and stores it in users.tsv,password is hashed.
 register() {
 #      read -p "Please enter new username : " newuser
       while true
@@ -27,7 +27,7 @@ register() {
        echo "$1 is now registered"
       return 0;
 }
-
+#chkpass() function verifies the password entered.
 chkpass() {
 while true
 do
