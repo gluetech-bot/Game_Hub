@@ -1,37 +1,44 @@
 import sys
 import pygame
 from pygame.locals import *
-# creating a class for players,if it's turn of player 1 the turn=1 and if it's turn of player 2 the turn=-1
-class Board:
-    def __init__(self, player_1, player_2, total_rows, turn=1):
-        self.player_1 = player_1
-        self.player_2 = player_2
-        self.board = np.zeros((total_rows, total_rows), dtype=int)
-        self.turn = turn
+# creating a class for players
+class BoardGame:
+   
 
-    def change_turn(self):
-        self.turn *= -1
-    
-    def make_move(self, row, col):
-        if self.board[row, col] == 0:
-            self.board[row, col] = self.turn
-            if self.check_winner():
-                return f"Player {self.player_1 if self.turn == 1 else self.player_2} wins!"
-            elif np.all(self.board != 0):
-                return "It's a draw!"
-            else:
-                self.change_turn()
-                return "Move accepted."
-        else:
-            return "Invalid move. Try again."
+    def _init_(self, player1: str, player2: str):
+        self.player_names   = {1: player1, 2: player2}
+        self.current_player = 1
+        self.board: np.ndarray = None
+        self.winner         = None
+        self.move_count     = 0
+        self.reset()
 
-    def check_winner(self):
+    def switch_turn(self):
+        self.current_player = 2 if self.current_player == 1 else 1
+
+    def is_game_over(self) -> bool:
+        return self.winner is not None
+
+    def current_player_name(self) -> str:
+        return self.player_names[self.current_player]
+
+    def opponent_player(self) -> int:
+        return 2 if self.current_player == 1 else 1
+
+    def get_result_string(self) -> str:
+        if self.winner == 0:
+            return "It's a draw!"
+        return f"{self.player_names[self.winner]} wins!"
+
+    def get_font(self, size: int, bold: bool = False) -> pygame.font.Font:  ####
+        return pygame.font.SysFont("segoeui", size, bold=bold)
+
+    def draw_something(self,surf: pygame.Surface):
+        
         pass
 
-    def reset_game(self):
-        self.board.fill(0)
-        self.turn = 1
-
+# p1=player(sys.argv[1],True)
+# p2=player(sys.argv[2],False)
 
 pygame.init()
 pygame.display.set_caption("Game Hub")
@@ -44,7 +51,7 @@ menu_bkgnd=pygame.image.load("./Images/menu_bkgnd.png")
 menu_bkgnd_f=pygame.transform.scale(menu_bkgnd,(screen_width,screen_height))
 
 tic_rect= pygame.Rect(130, 200, 470, 90)
-rev_rect= pygame.Rect(130, 315, 470, 90)
+othello_rect= pygame.Rect(130, 310, 470, 90)
 four_rect= pygame.Rect(130, 430, 470, 90)
 settings_rect= pygame.Rect(130, 545, 470, 90)
 
@@ -64,8 +71,8 @@ while running:
     if tic_rect.collidepoint(mouse_pos):
         menu_scr.blit(hover_surface, tic_rect.topleft)
 
-    if rev_rect.collidepoint(mouse_pos):
-        menu_scr.blit(hover_surface, rev_rect.topleft)
+    if othello_rect.collidepoint(mouse_pos):
+        menu_scr.blit(hover_surface, othello_rect.topleft)
 
     if four_rect.collidepoint(mouse_pos):
         menu_scr.blit(hover_surface, four_rect.topleft)
@@ -77,7 +84,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if tic_rect.collidepoint(event.pos):
                 print("Tic Tac Toe")
-            if rev_rect.collidepoint(event.pos):
+            if othello_rect.collidepoint(event.pos):
                 print("Reversi")
             if four_rect.collidepoint(event.pos):
                 print("4 in a row")
@@ -90,5 +97,3 @@ while running:
     pygame.display.update()
 
 pygame.quit()
-
-
