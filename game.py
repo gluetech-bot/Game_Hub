@@ -1,18 +1,37 @@
 import sys
 import pygame
 from pygame.locals import *
-# creating a class for players
-class player:
-	def __init__(self,name,turn):
-		self.name=name
-		self.turn=turn
-	def switch(self,other):
-		self.turn,other.turn=other.turn,self.turn
-	def win(self):
-		pass
+# creating a class for players,if it's turn of player 1 the turn=1 and if it's turn of player 2 the turn=-1
+class Board:
+    def __init__(self, player_1, player_2, total_rows, turn=1):
+        self.player_1 = player_1
+        self.player_2 = player_2
+        self.board = np.zeros((total_rows, total_rows), dtype=int)
+        self.turn = turn
 
-# p1=player(sys.argv[1],True)
-# p2=player(sys.argv[2],False)
+    def change_turn(self):
+        self.turn *= -1
+    
+    def make_move(self, row, col):
+        if self.board[row, col] == 0:
+            self.board[row, col] = self.turn
+            if self.check_winner():
+                return f"Player {self.player_1 if self.turn == 1 else self.player_2} wins!"
+            elif np.all(self.board != 0):
+                return "It's a draw!"
+            else:
+                self.change_turn()
+                return "Move accepted."
+        else:
+            return "Invalid move. Try again."
+
+    def check_winner(self):
+        pass
+
+    def reset_game(self):
+        self.board.fill(0)
+        self.turn = 1
+
 
 pygame.init()
 pygame.display.set_caption("Game Hub")
@@ -25,9 +44,9 @@ menu_bkgnd=pygame.image.load("./Images/menu_bkgnd.png")
 menu_bkgnd_f=pygame.transform.scale(menu_bkgnd,(screen_width,screen_height))
 
 tic_rect= pygame.Rect(130, 200, 470, 90)
-rev_rect= pygame.Rect(130, 310, 470, 90)
+rev_rect= pygame.Rect(130, 315, 470, 90)
 four_rect= pygame.Rect(130, 430, 470, 90)
-settings_rect= pygame.Rect(130, 540, 470, 90)
+settings_rect= pygame.Rect(130, 545, 470, 90)
 
 hover_surface = pygame.Surface((470, 90), pygame.SRCALPHA)
 hover_surface.fill((0, 0, 0, 100))
