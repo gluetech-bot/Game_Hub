@@ -1,0 +1,94 @@
+\documentclass[12pt]{article}
+\usepackage[margin=0.6in]{geometry}
+\usepackage{times}
+\usepackage[utf8]{inputenc}
+\usepackage{dirtree}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage[rightcaption]{sidecap}
+\usepackage{verbatim}
+\usepackage[backend=bibtex]{biblatex}
+
+
+\pagestyle{fancy}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan
+}
+
+\title{Mini Game Hub \\ with Pygame}
+\author{Sree Vatsava \& Shanmukha Sai}
+\date{}
+
+\lhead{Mini Game Hub}
+\rhead{Sree Vatsava \& Shanmukha Sai}
+
+\begin{document}
+
+\maketitle
+
+    \begin{abstract}
+        This report outlines the development process of us making the Game Hub: A PYGAME based two player games.
+        It covers the game's concept, design, implementation, and the challenges encountered during development.
+        The report aims to provide a comprehensive overview that enables understanding and playing the game without direct access to its source code.
+    \end{abstract}
+
+\tableofcontents
+\clearpage
+
+\section{Introduction}
+In this project, we developed a mini game hub using Pygame, a popular Python library for game development. The game hub includes three different games: Tic Tac Toe, Connect 4, and Othello. Each game is designed to provide an engaging and enjoyable gaming experience while showcasing our programming skills and creativity.
+
+\section{Game Descriptions}
+\subsection{Tic Tac Toe}
+Tic Tac Toe is a classic strategy game genrally played on a 3x3 grid,but this tic tac toe is 10x10. Two players take turns placing their marks (X or O) on the grid, with the goal of getting five of their marks in a row (horizontally, vertically, or diagonally) before the opponent does.
+\subsection{Connect 4}
+Connect 4 is a two-player connection game in which players take turns dropping colored discs into a vertically oriented grid. The objective is to be the first player to get four of their own discs in a row (horizontally, vertically, or diagonally).
+\subsection{Othello}
+Othello, also known as Reversi, is a strategy board game for two players. The game is played on an 8x8 grid, and players take turns placing their pieces on the board. The objective is to have the most pieces on the board by the end of the game, which is achieved by surrounding and flipping the opponent's pieces.
+
+\section{Modules}
+    The external modules used are:
+    \begin{itemize}
+        \item \texttt{pygame-ce} - The frequently updated pygame community edition version of pygame, which is a set of Python modules designed for writing video games.
+        \item \texttt{numpy} - A powerful library for numerical computing in Python, which provides support for large multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays.
+        \item \texttt{matplotlib} - A plotting library for the Python programming language and its numerical mathematics extension NumPy. It provides an object-oriented API for embedding plots into applications using general-purpose GUI toolkits like Tkinter, wxPython, Qt, or GTK.
+        \item \texttt{pathlib} - A module that provides an object-oriented interface to the file system.
+        \item \texttt{Sys} - A module that provides access to some variables used or maintained by the interpreter and to functions that interact with the interpreter.
+        \item \texttt{Time} - A module that provides various time-related functions.
+        \item \texttt{os} - A module that provides a portable way of using operating system-dependent functionality.
+        I used this module to implement the priority queue for the A* algorithm.
+    \end{itemize}
+
+\section{Directory Structure}\label{sec:directory-structure}
+    The project directory is as follows:
+
+    \dirtree{%
+        .1 \hspace{1.5pt}..
+        .2 \texttt{main.sh}.
+        .2 \texttt{README.md}.
+        .2 \texttt{game.py}.
+        .2 \texttt{leaderboard.sh}.
+        .2 \texttt{Games/}.
+        .3 \texttt{tictactoe.py}.
+        .3 \texttt{connect\_4.py}.
+        .3 \texttt{othello.py}.
+        .2 \texttt{Images/}.
+        .3 \texttt{menu\_bkgnd.png}.
+        .3 \texttt{tic\_bkgnd.png}.
+        .3 \texttt{connect\_bkgnd.png}.
+        .3 \texttt{othello\_bkgnd.png}.
+        .2 \texttt{Report/}.
+        .3 \texttt{report.tex}.
+    }
+\end{document}

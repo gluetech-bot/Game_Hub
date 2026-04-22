@@ -14,14 +14,14 @@ BLACK = (0, 0, 0)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(BASE_DIR, ".."))
 
-from cl import BoardGame
+from game import BoardGame
 
 class Connect4(BoardGame):
     def __init__(self, player1, player2):
         self.size = 7
         self.board = np.zeros((self.size, self.size))
         self.current_player = 1  # 1 = X, -1 = O
-        self.player_names   = {1: player1, -1: player2}
+        self.player_names   = {1: player1, 2: player2}
         self.game_over = False
         self.winner         = None
         self.move_count     = 0
@@ -31,7 +31,7 @@ class Connect4(BoardGame):
         
     def change_board(self,col):
         for r in range(6,-1,-1):
-         if a.board[r][col] == 0:
+         if self.board[r][col] == 0:
            self.board[r][col] = self.current_player
            return 
          
@@ -94,7 +94,7 @@ class Connect4(BoardGame):
                 if self.board[i][j] == -1:
                     pygame.draw.circle(screen, (0, 220, 255),(60+CELL_SIZE*(j+0.5),120+CELL_SIZE*(i+0.5)),30)
         
-bg_img = pygame.image.load("Games/image.png")   # your image file
+bg_img = pygame.image.load("./Images/menu_bkgnd.png")   # your image file
 bg_img = pygame.transform.scale(bg_img, (720, 720))
 def draw(screen, a):
     screen.blit(bg_img,(0,0))
