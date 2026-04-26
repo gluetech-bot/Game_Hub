@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+Report/
+*.log
+*.aux
+*.out
+*.pdf
+*.run.xml
+*.toc
