@@ -2,6 +2,7 @@ import sys
 import numpy as np
 import pygame
 from pygame.locals import *
+# from Games.tictactoe import TicTacToe
 # creating a class for players
 class BoardGame:
    
@@ -34,10 +35,22 @@ class BoardGame:
     def get_font(self, size: int, bold: bool = False) -> pygame.font.Font:  ####
         return pygame.font.SysFont("segoeui", size, bold=bold)
 
+# game.py
+def start_tic():
+    from Games.tictactoe import TicTacToe   
+    game = TicTacToe(p1, p2)
+    game.run_tic()    
+def start_connect4():
+    from Games.connect4 import Connect4  
+    game = Connect4(p1, p2)
+    game.run_connect4() 
+def start_othello():
+    from Games.othello import Othello  
+    game = Othello(p1, p2)
+    game.run_othello()
     
-
-# p1=player(sys.argv[1],True)
-# p2=player(sys.argv[2],False)
+p1=sys.argv[1]
+p2=sys.argv[2]
 
 def main():
     pygame.init()
@@ -83,11 +96,11 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if tic_rect.collidepoint(event.pos):
-                    print("Tic Tac Toe")
+                    start_tic()
                 if othello_rect.collidepoint(event.pos):
-                    print("Reversi")
+                    start_othello()
                 if four_rect.collidepoint(event.pos):
-                    print("4 in a row")
+                    start_connect4()
                 if settings_rect.collidepoint(event.pos):
                     print("Settings")
     # for quitting program

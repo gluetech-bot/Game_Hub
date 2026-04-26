@@ -3,13 +3,15 @@ import sys
 import pygame
 import os
 from numpy.lib.stride_tricks import sliding_window_view
-pygame.init()
+
+# import game
+
 WIDTH, HEIGHT = 720, 720
-Board_Size = 602
+Board_Size = 364
 ROWS, COLS = 7, 7
-CELL_SIZE = Board_Size // COLS  # 72
-OFFSET_X = (WIDTH - 600) // 2   # center horizontally
-OFFSET_Y = (HEIGHT - 600) // 2  # center vertically
+CELL_SIZE = Board_Size // COLS  # 51
+OFFSET_X = 180#(WIDTH - Board_Size) // 2   # center horizontally
+OFFSET_Y = 110#(HEIGHT - Board_Size) // 2  # center vertically
 BLACK = (0, 0, 0)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(BASE_DIR, ".."))
@@ -20,14 +22,16 @@ class Connect4(BoardGame):
     def __init__(self, player1, player2):
         self.size = 7
         self.board = np.zeros((self.size, self.size))
-        self.current_player = 1  # 1 = X, -1 = O
+        self.current_player = 1  # 1 = X, 2 = O
         self.player_names   = {1: player1, 2: player2}
         self.game_over = False
         self.winner         = None
         self.move_count     = 0
         self.reset()
     def make_move(self, col):
-        return self.board[0][col] == 0
+        if 0 <= col < COLS:
+            return self.board[0][col] == 0
+        return False
         
     def change_board(self,col):
         for r in range(6,-1,-1):
@@ -36,22 +40,25 @@ class Connect4(BoardGame):
            return 
          
     def reset(self):
-        pass
+        self.board = np.zeros((self.size, self.size))
+        self.current_player = 1
+        self.game_over = False
+        self.winner = None
         
     def check_win(self):
     
      mask = (self.board == self.current_player)
 
     # --- Horizontal ---
-     h_windows = sliding_window_view(mask, (1, 5))
+     h_windows = sliding_window_view(mask, (1, 4))
      h_check = np.any(np.all(h_windows, axis=(2, 3)))
 
     # --- Vertical ---
-     v_windows = sliding_window_view(mask, (5, 1))
+     v_windows = sliding_window_view(mask, (4, 1))
      v_check = np.any(np.all(v_windows, axis=(2, 3)))
 
     # --- Diagonal ---
-     d_windows = sliding_window_view(mask, (5, 5))
+     d_windows = sliding_window_view(mask, (4, 4))
 
     # main diagonal
      main_diag = np.all(
@@ -89,84 +96,85 @@ class Connect4(BoardGame):
         for i in range(ROWS):
             for j in range(COLS):
                 if self.board[i][j] == 1:
-                    pygame.draw.circle(screen, (0, 220, 0),(60+CELL_SIZE*(j+0.5),120+CELL_SIZE*(i+0.5)),30)
-                     #draw X
-                if self.board[i][j] == -1:
-                    pygame.draw.circle(screen, (0, 220, 255),(60+CELL_SIZE*(j+0.5),120+CELL_SIZE*(i+0.5)),30)
+                    pygame.draw.circle(screen, (0, 220, 0),(OFFSET_X+CELL_SIZE*(j+0.5),2*OFFSET_Y+CELL_SIZE*(i+0.5)),20)
+                     
+                if self.board[i][j] == 2:
+                    pygame.draw.circle(screen, (0, 220, 255),(OFFSET_X+CELL_SIZE*(j+0.5),2*OFFSET_Y+CELL_SIZE*(i+0.5)),20)
+
+    def run_connect4(self):
+        pygame.init()
+        pygame.display.set_caption("Connect 4")
         
-bg_img = pygame.image.load("./Images/menu_bkgnd.png")   # your image file
-bg_img = pygame.transform.scale(bg_img, (720, 720))
-def draw(screen, a):
-    screen.blit(bg_img,(0,0))
-    a.draw_grid(screen)
+        acc=pygame.display.set_mode((WIDTH,HEIGHT))
+        bg_img = pygame.image.load("./Images/connect_bkgnd.png")   # your image file
+        bg_img = pygame.transform.scale(bg_img, (720, 720))
+        def draw(screen, a):
+            screen.blit(bg_img,(0,0))
+            a.draw_grid(screen)
+
+        reset_rect= pygame.Rect(135, 625, 215, 55)
+        back_rect= pygame.Rect(375, 625, 215, 55)
+        hover_surface = pygame.Surface((215, 55), pygame.SRCALPHA)
+        hover_surface.fill((0, 0, 0, 100))
+        
+        
 
 
-
-
-acc=pygame.display.set_mode((WIDTH,HEIGHT))
-
-a = Connect4("ram","shyam")   
-running = True
-while running:
-    mouse_pos = pygame.mouse.get_pos()
-    draw(acc,a)   
-    a.fill_board(acc)
-    g = pygame.font.SysFont("segoeui", 40)
-    f = pygame.font.SysFont("consolas", 20)
-    text = g.render("Tic Tac Toe", True, (0, 220, 255))
-    text_rect = text.get_rect(center=(WIDTH//2, 20))
-
-    acc.blit(text, text_rect)
-    # glow layer
-    if not a.game_over:
-      glow = f.render(a.player_names[a.current_player]+"'s turn"+" :", True, (0, 220, 255))
-      acc.blit(glow, (22, 62))
-      text = f.render(a.player_names[a.current_player]+"'s turn"+" :", True, (180, 240, 255)) 
-      acc.blit(text, (20, 60))
-    if a.game_over:
-        glow = f.render(a.player_names[a.winner] + " Wins", True, (0, 220, 255))
-        acc.blit(glow, (22, 62))
-
-        text = f.render(a.player_names[a.winner] + " Wins", True, (180, 240, 255))
-        acc.blit(text, (20, 60))
-    
-    for event in pygame.event.get():
-       
-       
-       if event.type == pygame.MOUSEBUTTONDOWN:
-            if not a.game_over: 
-              d = (mouse_pos[0]-60)//CELL_SIZE
-              
-         
-              if a.make_move(d):
-                
-                a.change_board(d)
-                
-                if a.check_win():
-                   a.game_over = True
-                   a.winner = a.current_player
+        
+ 
+        running = True
+        while running:
+            mouse_pos = pygame.mouse.get_pos()
+            draw(acc,self)   
+            self.fill_board(acc)
             
-                else:    
-                   a.switch_turn()
-                   glow = f.render(a.player_names[a.current_player]+"'s turn"+" :Place X", True, (0, 220, 255))
-                   acc.blit(glow, (22, 62))
-                   text = f.render(a.player_names[a.current_player]+"'s turn"+" :Place X", True, (180, 240, 255)) 
-                   acc.blit(text, (20, 60))
+            g = pygame.font.SysFont("segoeui", 40)
+            f = pygame.font.SysFont("consolas", 20)
+            # text = g.render("Connect 4", True, (0, 220, 255))
+            # text_rect = text.get_rect(center=(WIDTH//2, 20))
+            if reset_rect.collidepoint(mouse_pos):
+                acc.blit(hover_surface, reset_rect.topleft)
+            if back_rect.collidepoint(mouse_pos):
+                acc.blit(hover_surface, back_rect.topleft)
+            # acc.blit(text, text_rect)
+            # glow layer
+            if not self.game_over:
+                glow = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (0, 220, 255))
+                acc.blit(glow, (210,130))
+                text = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (180, 240, 255)) 
+                acc.blit(text, (210,130))
+            if self.game_over:
+                glow = f.render(self.player_names[self.winner] + " Wins", True, (0, 220, 255))
+                acc.blit(glow, (210,130))
 
-              else:
-                  pass   #can print invalid move  
-            else:
-              
-             glow = f.render(a.player_names[a.winner] + " Wins", True, (0, 220, 255))
-             acc.blit(glow, (22, 62))
+                text = f.render(self.player_names[self.winner] + " Wins", True, (180, 240, 255))
+                acc.blit(text, (210,130))
 
-             text = f.render(a.player_names[a.winner] + " Wins", True, (180, 240, 255))
-             acc.blit(text, (20, 60))
-             
-            
+            for event in pygame.event.get():
 
-       if event.type == pygame.QUIT:
-            running = False   
-    pygame.display.update()
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-pygame.quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if reset_rect.collidepoint(event.pos):
+                        self.reset()
+                        continue
+
+                    if back_rect.collidepoint(event.pos):
+                        return
+
+                    if not self.game_over:
+                        col = (event.pos[0] - OFFSET_X) // CELL_SIZE
+                        row = (event.pos[1] - 2 * OFFSET_Y) // CELL_SIZE
+
+                        if 0 <= row < ROWS and 0 <= col < COLS:
+                            if self.make_move(col):
+                                self.change_board(col)
+
+                                if self.check_win():
+                                    self.game_over = True
+                                    self.winner = self.current_player
+                                else:
+                                    self.switch_turn()
+            pygame.display.update()
