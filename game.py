@@ -1,11 +1,13 @@
 import sys
+import numpy as np
 import pygame
 from pygame.locals import *
+# from Games.tictactoe import TicTacToe
 # creating a class for players
 class BoardGame:
    
 
-    def _init_(self, player1: str, player2: str):
+    def __init__(self, player1: str, player2: str):
         self.player_names   = {1: player1, 2: player2}
         self.current_player = 1
         self.board: np.ndarray = None
@@ -33,67 +35,80 @@ class BoardGame:
     def get_font(self, size: int, bold: bool = False) -> pygame.font.Font:  ####
         return pygame.font.SysFont("segoeui", size, bold=bold)
 
-    def draw_something(self,surf: pygame.Surface):
-        
-        pass
+# game.py
+def start_tic():
+    from Games.tictactoe import TicTacToe   
+    game = TicTacToe(p1, p2)
+    game.run_tic()    
+def start_connect4():
+    from Games.connect4 import Connect4  
+    game = Connect4(p1, p2)
+    game.run_connect4() 
+def start_othello():
+    from Games.othello import Othello  
+    game = Othello(p1, p2)
+    game.run_othello()
+    
+p1=sys.argv[1]
+p2=sys.argv[2]
 
-# p1=player(sys.argv[1],True)
-# p2=player(sys.argv[2],False)
+def main():
+    pygame.init()
+    pygame.display.set_caption("Game Hub")
 
-pygame.init()
-pygame.display.set_caption("Game Hub")
+    screen_width=720
+    screen_height=720
 
-screen_width=720
-screen_height=720
+    menu_scr=pygame.display.set_mode((screen_width,screen_height))
+    menu_bkgnd=pygame.image.load("./Images/menu_bkgnd.png")
+    menu_bkgnd_f=pygame.transform.scale(menu_bkgnd,(screen_width,screen_height))
 
-menu_scr=pygame.display.set_mode((screen_width,screen_height))
-menu_bkgnd=pygame.image.load("./Images/menu_bkgnd.png")
-menu_bkgnd_f=pygame.transform.scale(menu_bkgnd,(screen_width,screen_height))
+    tic_rect= pygame.Rect(130, 200, 470, 90)
+    othello_rect= pygame.Rect(130, 310, 470, 90)
+    four_rect= pygame.Rect(130, 430, 470, 90)
+    settings_rect= pygame.Rect(130, 545, 470, 90)
 
-tic_rect= pygame.Rect(130, 200, 470, 90)
-othello_rect= pygame.Rect(130, 310, 470, 90)
-four_rect= pygame.Rect(130, 430, 470, 90)
-settings_rect= pygame.Rect(130, 540, 470, 90)
-
-hover_surface = pygame.Surface((470, 90), pygame.SRCALPHA)
-hover_surface.fill((0, 0, 0, 100))
+    hover_surface = pygame.Surface((470, 90), pygame.SRCALPHA)
+    hover_surface.fill((0, 0, 0, 100))
 
 
 
-running=True
+    running=True
 
-while running:
-    menu_scr.blit(menu_bkgnd_f, (0, 0))
+    while running:
+        menu_scr.blit(menu_bkgnd_f, (0, 0))
 
-    mouse_pos = pygame.mouse.get_pos()
+        mouse_pos = pygame.mouse.get_pos()
 
-# drawing hover effects
-    if tic_rect.collidepoint(mouse_pos):
-        menu_scr.blit(hover_surface, tic_rect.topleft)
+    # drawing hover effects
+        if tic_rect.collidepoint(mouse_pos):
+            menu_scr.blit(hover_surface, tic_rect.topleft)
 
-    if othello_rect.collidepoint(mouse_pos):
-        menu_scr.blit(hover_surface, othello_rect.topleft)
+        if othello_rect.collidepoint(mouse_pos):
+            menu_scr.blit(hover_surface, othello_rect.topleft)
 
-    if four_rect.collidepoint(mouse_pos):
-        menu_scr.blit(hover_surface, four_rect.topleft)
+        if four_rect.collidepoint(mouse_pos):
+            menu_scr.blit(hover_surface, four_rect.topleft)
 
-    if settings_rect.collidepoint(mouse_pos):
-        menu_scr.blit(hover_surface, settings_rect.topleft)
-# for checking mouse clicks
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if tic_rect.collidepoint(event.pos):
-                print("Tic Tac Toe")
-            if othello_rect.collidepoint(event.pos):
-                print("Reversi")
-            if four_rect.collidepoint(event.pos):
-                print("4 in a row")
-            if settings_rect.collidepoint(event.pos):
-                print("Settings")
-# for quitting program
-        if event.type == pygame.QUIT:
-            running = False
+        if settings_rect.collidepoint(mouse_pos):
+            menu_scr.blit(hover_surface, settings_rect.topleft)
+    # for checking mouse clicks
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if tic_rect.collidepoint(event.pos):
+                    start_tic()
+                if othello_rect.collidepoint(event.pos):
+                    start_othello()
+                if four_rect.collidepoint(event.pos):
+                    start_connect4()
+                if settings_rect.collidepoint(event.pos):
+                    print("Settings")
+    # for quitting program
+            if event.type == pygame.QUIT:
+                running = False
 
-    pygame.display.update()
+        pygame.display.update()
 
-pygame.quit()
+    pygame.quit()
+if __name__ == "__main__":
+    main()
