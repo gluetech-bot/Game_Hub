@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import pygame
+import subprocess
 from pygame.locals import *
 # from Games.tictactoe import TicTacToe
 # creating a class for players
@@ -39,16 +40,18 @@ class BoardGame:
 def start_tic():
     from Games.tictactoe import TicTacToe   
     game = TicTacToe(p1, p2)
-    game.run_tic()    
+    con = game.run_tic()
+    subprocess.run(["bash","leaderboard.sh",str(con)])
 def start_connect4():
     from Games.connect4 import Connect4  
     game = Connect4(p1, p2)
-    game.run_connect4() 
+    con = game.run_connect4() 
+    subprocess.run(["bash","leaderboard.sh",str(con)])
 def start_othello():
     from Games.othello import Othello  
     game = Othello(p1, p2)
-    game.run_othello()
-    
+    con = game.run_othello()
+    subprocess.run(["bash","leaderboard.sh",str(con)])
 p1=sys.argv[1]
 p2=sys.argv[2]
 

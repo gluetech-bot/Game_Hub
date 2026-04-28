@@ -3,7 +3,8 @@ import sys
 import pygame
 import os
 from numpy.lib.stride_tricks import sliding_window_view
-
+from datetime import datetime
+now = datetime.now().strftime("%Y-%m-%d")
 # import game
 
 WIDTH, HEIGHT = 720, 720
@@ -111,12 +112,43 @@ class Connect4(BoardGame):
         def draw(screen, a):
             screen.blit(bg_img,(0,0))
             a.draw_grid(screen)
+        def draw_popup(screen):
+            screen_w, screen_h = 720, 720
+            popup_w, popup_h = 450, 400
+            btn_w, btn_h = 400, 60
 
+            popup_x = (screen_w - popup_w) // 2
+            popup_y = (screen_h - popup_h) // 2
+
+            popup_rect = pygame.Rect(popup_x, popup_y, popup_w, popup_h)
+
+            pygame.draw.rect(screen, (20, 20, 20), popup_rect, border_radius=15)
+            pygame.draw.rect(screen, (255, 255, 255), popup_rect, 2, border_radius=15)
+            h_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 10, btn_w, btn_h)
+            wins_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 80, btn_w, btn_h)
+            loss_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 160, btn_w, btn_h)
+            ratio_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 240, btn_w, btn_h)
+
+            font = pygame.font.SysFont("segoeui", 26, bold=True)
+
+            for rect, text in [
+                (h_rect, "How Do You Want Leaderboard"),
+                (wins_rect, "By Wins"),
+                (loss_rect, "By Losses"),
+                (ratio_rect, "By W/L Ratio")
+            ]:
+                pygame.draw.rect(screen, (50, 50, 50), rect, border_radius=10)
+                pygame.draw.rect(screen, (255, 255, 255), rect, 2, border_radius=10)
+
+                label = font.render(text, True, (255, 255, 255))
+                screen.blit(label, label.get_rect(center=rect.center))
+
+            return h_rect,wins_rect, loss_rect, ratio_rect
         reset_rect= pygame.Rect(135, 625, 215, 55)
         back_rect= pygame.Rect(375, 625, 215, 55)
         hover_surface = pygame.Surface((215, 55), pygame.SRCALPHA)
         hover_surface.fill((0, 0, 0, 100))
-        
+        wins_rect = loss_rect = ratio_rect = None
         
 
 
@@ -149,7 +181,7 @@ class Connect4(BoardGame):
 
                 text = f.render(self.player_names[self.winner] + " Wins", True, (180, 240, 255))
                 acc.blit(text, (210,130))
-
+                h_rect, wins_rect, loss_rect, ratio_rect = draw_popup(acc)
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
@@ -175,6 +207,20 @@ class Connect4(BoardGame):
                                 if self.check_win():
                                     self.game_over = True
                                     self.winner = self.current_player
+                                    winner = self.player_names[self.current_player]
+                                    loser = self.player_names[2 if self.current_player == 1 else 1]
+                                    self.winner = self.current_player
+                                    
+                                    with open("history.csv", "a") as f:
+                                        f.write(f"{winner},{loser},{now},Connect4\n")
                                 else:
                                     self.switch_turn()
+                    if self.game_over:
+                       
+                            if wins_rect is not None and wins_rect.collidepoint(event.pos):
+                                return "wins"
+                            if loss_rect is not None and loss_rect.collidepoint(event.pos):
+                                return "loss"
+                            if ratio_rect is not None and ratio_rect.collidepoint(event.pos):
+                                return "ratio"            
             pygame.display.update()
