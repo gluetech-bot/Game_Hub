@@ -24,33 +24,33 @@ register() {
       done
       hashpass=$(echo $newpass | sha256sum | cut -d " " -f 1)
       echo "$1 $hashpass" >> users.tsv
-       echo "$1 is now registered"
+       echo -e "\e[32m$user1 is now registered\e[0m"
       return 0;
 }
 #chkpass() function verifies the password entered.
 chkpass() {
 while true
 do
-read -p "Enter  password of \"$1\": " pass
+read -p $'\e[33mEnter  password of "'$1$'": \e[0m' pass
 hashpass=$(echo $pass | sha256sum | cut -d " " -f 1)
 if [[ $hashpass == $(awk -v val="$1" 'val==$1{print $2}' users.tsv) ]] ; then
     return 0 ;
   else
-    echo "The password entered is wrong , please try again"
+    echo -e "\e[31mThe password entered is wrong , please try again\e[0m"
   fi
 done
 }
 
-read -p "Player 1 , Enter your username : " user1
+read -p $'\e[33mPlayer 1 , Enter your username : \e[0m' user1
 chkusr $user1
 chkpass $user1
 while true
 do
-read -p "Player 2 , Enter your username : " user2
+read -p $'\e[33mPlayer 2 , Enter your username : \e[0m' user2
 if [[ $user1 != $user2 ]] ;then
      break
 else
- echo "enter different username"
+ echo -e "\e[31mEnter different username\e[0m"
 fi
 done
 chkusr $user2
