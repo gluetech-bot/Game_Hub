@@ -5,7 +5,7 @@ import os
 from numpy.lib.stride_tricks import sliding_window_view
 from datetime import datetime
 now = datetime.now().strftime("%Y-%m-%d")
-
+# Define constants for the game dimensions and board configuration
 WIDTH, HEIGHT = 720, 720
 Board_Size = 364
 ROWS, COLS = 7, 7
@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(BASE_DIR, ".."))
 
 from game import BoardGame
-
+# Connect4 class inherits from the BoardGame class and implements the game logic for Connect 4
 class Connect4(BoardGame):
     #Initialize the game board and set the current player
     def __init__(self, player1, player2):
@@ -77,6 +77,8 @@ class Connect4(BoardGame):
 
      return h_check or v_check or d_check
        
+   
+    # Drawing the game grid on the screen using Pygame
     def is_full(self):
       return np.all(self.board != 0)
 
@@ -92,8 +94,7 @@ class Connect4(BoardGame):
            pygame.draw.line(screen,(80, 140, 255),
             (OFFSET_X + i * CELL_SIZE, 2*OFFSET_Y),
             (OFFSET_X + i * CELL_SIZE,2*OFFSET_Y + Board_Size))
-    #def run_game(self,scr:pygame.Surface):
-        #self.draw_grid(self,scr)
+    # Filling the game board with the pieces based on the current state of the board
     def fill_board(self,screen):
         for i in range(ROWS):
             for j in range(COLS):
@@ -102,14 +103,16 @@ class Connect4(BoardGame):
                      
                 if self.board[i][j] == 2:
                     pygame.draw.circle(screen, (0, 220, 255),(OFFSET_X+CELL_SIZE*(j+0.5),2*OFFSET_Y+CELL_SIZE*(i+0.5)),20)
-
+    # Running the main game loop, handling user input, and updating the game state accordingly
     def run_connect4(self):
         pygame.init()
         pygame.display.set_caption("Connect 4")
         
         acc=pygame.display.set_mode((WIDTH,HEIGHT))
-        bg_img = pygame.image.load("./Images/connect_bkgnd.png")   # your image file
+        # The image file
+        bg_img = pygame.image.load("./Images/connect_bkgnd.png")   
         bg_img = pygame.transform.scale(bg_img, (720, 720))
+        # Function to draw the game grid and pieces on the screen
         def draw(screen, a):
             screen.blit(bg_img,(0,0))
             a.draw_grid(screen)
@@ -117,7 +120,7 @@ class Connect4(BoardGame):
             screen_w, screen_h = 720, 720
             popup_w, popup_h = 450, 400
             btn_w, btn_h = 295, 30
-
+        # Creating the button rectangles for the leaderboard buttons and centering the popup on the screen
             popup_x = (screen_w - popup_w) // 2
             popup_y = (screen_h - popup_h) // 2
 
@@ -129,10 +132,10 @@ class Connect4(BoardGame):
             wins_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 270, btn_w, btn_h)
             loss_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 310, btn_w, btn_h)
             ratio_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 350, btn_w, btn_h)
-
+            # Creating a semi-transparent surface for the hover effect on the buttons
             hover_leader = pygame.Surface((btn_w, btn_h), pygame.SRCALPHA)
             hover_leader.fill((0, 0, 0, 100))
-            
+            # If the winner's name is too long, scale down the text to fit within the popup
             font = pygame.font.SysFont("segoeui", 26, bold=True)
             box_width = 260
             if self.winner == 1 or self.winner == 2:
@@ -171,16 +174,13 @@ class Connect4(BoardGame):
             draw(acc,self)   
             self.fill_board(acc)
             
-            g = pygame.font.SysFont("segoeui", 40)
             f = pygame.font.SysFont("consolas", 20)
-            # text = g.render("Connect 4", True, (0, 220, 255))
-            # text_rect = text.get_rect(center=(WIDTH//2, 20))
+            
             if reset_rect.collidepoint(mouse_pos):
                 acc.blit(hover_surface, reset_rect.topleft)
             if back_rect.collidepoint(mouse_pos):
                 acc.blit(hover_surface, back_rect.topleft)
-            # acc.blit(text, text_rect)
-            # glow layer
+            # If the player's name is too long, scale down the text to fit within the designated area
             glow = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (0, 220, 255))
             text = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (180, 240, 255)) 
             
@@ -193,7 +193,7 @@ class Connect4(BoardGame):
                 glow = pygame.transform.smoothscale(glow, (new_width, new_height))
             acc.blit(glow, (210, 130))
             acc.blit(text, (210, 130))
-            
+            # If the game is over, draw the popup with the winner's name and leaderboard buttons
             if self.game_over:
                 wins_rect, loss_rect, ratio_rect = draw_popup(acc)
             for event in pygame.event.get():
@@ -224,7 +224,7 @@ class Connect4(BoardGame):
                                     winner = self.player_names[self.current_player]
                                     loser = self.player_names[2 if self.current_player == 1 else 1]
                                     self.winner = self.current_player
-                                    
+                                    # Record the game result in the history.csv file with the winner's name, loser's name, date, and game name
                                     with open("history.csv", "a") as f:
                                         f.write(f"{winner},{loser},{now},Connect4\n")
                                 elif self.is_full():
@@ -232,6 +232,7 @@ class Connect4(BoardGame):
                                     self.winner = 0  
                                 else:
                                     self.switch_turn()
+                    # If the game is over, check if the user clicked on any of the leaderboard buttons and return the corresponding result
                     if self.game_over:
                        
                             if wins_rect is not None and wins_rect.collidepoint(event.pos):
