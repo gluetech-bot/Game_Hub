@@ -4,8 +4,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{dirtree}
 \usepackage{subcaption}
-\usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{titlesec}
 \usepackage{xcolor}
@@ -15,7 +13,10 @@
 \usepackage[rightcaption]{sidecap}
 \usepackage{verbatim}
 \usepackage[backend=bibtex]{biblatex}
+\addbibresource{report.bib}
 
+\setlength{\headheight}{15pt}
+\addtolength{\topmargin}{20pt}
 
 \pagestyle{fancy}
 
@@ -49,7 +50,8 @@
 \section{Introduction}
 In this project, we developed a mini game hub using Pygame, a popular Python library for game development. The game hub includes three different games: Tic Tac Toe, Connect 4, and Othello. Each game is designed to provide an engaging and enjoyable gaming experience while showcasing our programming skills and creativity.
 
-\section{Game Descriptions}
+\section{Design and Architecture}
+There are three main components of the game hub: the main menu, the individual games, and the leaderboard system. The main menu serves as the central hub where players can select which game to play. Each game has its own unique interface and gameplay mechanics, while the leaderboard system keeps track of player scores and rankings across all games.
 \subsection{Tic Tac Toe}
 Tic Tac Toe is a classic strategy game genrally played on a 3x3 grid,but this tic tac toe is 10x10. Two players take turns placing their marks (X or O) on the grid, with the goal of getting five of their marks in a row (horizontally, vertically, or diagonally) before the opponent does.
 \subsection{Connect 4}
@@ -57,7 +59,16 @@ Connect 4 is a two-player connection game in which players take turns dropping c
 \subsection{Othello}
 Othello, also known as Reversi, is a strategy board game for two players. The game is played on an 8x8 grid, and players take turns placing their pieces on the board. The objective is to have the most pieces on the board by the end of the game, which is achieved by surrounding and flipping the opponent's pieces.
 
-\section{Modules}
+\section{Features Implemented}
+\begin{itemize}
+    \item Main menu with game selection options
+    \item Individual game interfaces with unique gameplay mechanics
+    \item Leaderboard system to track player scores and rankings
+    \item User account management for player registration and login
+    \item Graphical representation of player statistics and game preferences
+\end{itemize}
+
+\section{External Libraries}
     The external modules used are:
     \begin{itemize}
         \item \texttt{pygame-ce} - The frequently updated pygame community edition version of pygame, which is a set of Python modules designed for writing video games.
@@ -70,11 +81,11 @@ Othello, also known as Reversi, is a strategy board game for two players. The ga
         I used this module to implement the priority queue for the A* algorithm.
     \end{itemize}
 
-\section{Directory Structure}\label{sec:directory-structure}
+\section{Directory Structure}
     The project directory is as follows:
 
-    \dirtree{
-        .1 \hspace{1.5pt}..
+    \dirtree{%
+        .1 \texttt{Game\_Hub/}.
         .2 \texttt{main.sh}.
         .2 \texttt{README.md}.
         .2 \texttt{game.py}.
@@ -90,5 +101,123 @@ Othello, also known as Reversi, is a strategy board game for two players. The ga
         .3 \texttt{othello\_bkgnd.png}.
         .2 \texttt{Report/}.
         .3 \texttt{report.tex}.
-    }
+        .3 \texttt{report.pdf}.
+        }
+
+    
+
+\section{Running Instructions}
+    \subsection{Prerequisites}
+    \begin{enumerate}
+        \item Ensure you have Python installed on your system.
+        \item Install the required libraries using pip:
+        \begin{verbatim}
+            pip install pygame-ce numpy matplotlib
+            pip install numpy
+        \end{verbatim}
+        If it's showing error like "This environment is externally managed" then:
+        \begin{verbatim}
+            sudo apt install python3-xyz
+        \end{verbatim}
+        , where xyz is the package you are trying to install.
+        \item Navigate to the project directory in your terminal.
+        
+        \end{enumerate} 
+        \subsection{Navigation}
+        Run the main script to start the game hub:
+        \begin{verbatim}
+            bash main.sh
+        \end{verbatim}
+        It will prompt for the usernames of the players and their passwords.
+        If the user is new, it can register a new account for them.
+        The username must not contain spaces,commas and must be unique.
+        If the users already exists, it will verify the password and log them in.\\
+        After successful login, the game hub menu will be displayed [\ref{fig:menu}], allowing players to
+        select and play any of the three games: Tic Tac Toe [\ref{fig:tic}], Connect 4 [\ref{fig:connect4}], or Othello [\ref{fig:othello}].
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.5\textwidth]{./assets/menu.png}
+            \caption{Game Hub Menu}
+            \label{fig:menu}
+        \end{figure}
+        \begin{figure}[h]
+    \centering
+
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{./assets/tic.png}
+        \caption{Tic Tac Toe}
+        \label{fig:tic}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{./assets/connect.png}
+        \caption{Connect 4}
+        \label{fig:connect4}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{./assets/othello.png}
+        \caption{Othello}
+        \label{fig:othello}
+    \end{subfigure}
+
+    \caption{Game Interfaces}
+    \label{fig:games}
+\end{figure}
+In each games you will have reset and back options.Back option takes you to
+the menu.
+
+
+\subsection{After Game}
+    After enjoying the game,there will be a pop-up showing who won
+    and in which order would you like to have the leaderboard printed.
+    Then you would get leaderboard [\ref{fig:leaderboard}] sorted on your option,and graphs [\ref{fig:Graphs}]
+    of what games you have played most,top rakers of game hub.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{./assets/leaderboard.png}
+        \caption{Leaderboard}
+        \label{fig:leaderboard}
+    \end{figure}
+    \begin{figure}[h]
+        \centering
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{./assets/graph1.jpeg}
+            \caption{Games Played}
+            \label{fig:graph1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}{0.45\textwidth}
+            \centering
+            \includegraphics[width=\linewidth]{./assets/graph2.jpeg}
+            \caption{Top Players}
+            \label{fig:graph2}
+        \end{subfigure}
+        \caption{Graphs}
+        \label{fig:Graphs}
+    \end{figure}
+\section{Retrosepective}
+    This project was a great learning experience for us.
+    We faced several challenges during the development process,
+    such as implementing the game logic, designing the user interface,
+    and managing user accounts and leaderboards. However,
+    we overcame these challenges through research,experimentation,
+    and collaboration. We also learned how to use Pygame effectively and gained insights into game development principles.\\
+    Some specific challenges we faced include:\\
+    \begin{itemize}
+        \item There were some tricky bugs in taking user input and making sure that there are no spaces that can cause trouble in leaderboard and user management.
+        \item Designing a user-friendly interface that was visually appealing and easy to navigate.
+        \item Preparing the end loop,when to give graphs.Where to prompt play again etc.
+    \end{itemize}
+    We brain stormed and implemented various solutions to fix the bugs which can possbly occur.
+    We also designed the interface iteratively, taking feedback from each other and making improvements based on that feedback.\\
+    Overall, this project allowed us to apply our programming skills in a practical context and provided us with valuable experience in game development, user interface design, and problem-solving.\\
+    With some more time, we would have liked to add more games to the hub,make some changes to UI.
+    \cite{maze_github}
+    \cite{pygame_official}
+    \printbibliography
 \end{document}

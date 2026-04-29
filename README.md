@@ -16,5 +16,26 @@ from a menu, play via a graphical interface, and have their results recorded on 
 ---
 
 ## Table of Contents
-1. [Introduction](https://github.com/gluetech-bot/Game_Hub/edit/main/README.md#introduction)
-2. []() 
+1. [Introduction]
+2. [Navigation] 
+
+---
+
+## Prerequisites
+
+
+---
+## Navigation
+
+- Launch the program using `bash main.sh`
+- Login using the user credentials,if credentials are not there,you can register.After registering main menu opens.
+- Main menu displays available games:
+  - Tic Tac Toe
+  - Connect 4
+  - Othello
+  - Settings
+- Click on a game to start playing
+- Use **Back** button to return to menu
+- Use **Reset** button to restart the current game
+- Hover over buttons for visual feedback
+---
