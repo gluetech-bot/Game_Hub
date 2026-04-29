@@ -8,3 +8,18 @@ j 5 0 INFINITE Connect4 999999.00
 a 0 1 0.00 Connect4 0.00
 f 1 0 INFINITE Connect4 999999.00
 s 1 6 0.17 Connect4 0.17
+sreevatsava12345 1 0 9999.00 Tic-Tac-Toe
+p3 0 2 0.00 Tic-Tac-Toe
+sreevatsava123456789 1 0 9999.00 Tic-Tac-Toe
+p2 0 4 0.00 Tic-Tac-Toe
+shanmukhasai 0 2 0.00 Tic-Tac-Toe
+p1 6 1 6.00 Tic-Tac-Toe
+sree 1 0 9999.00 Tic-Tac-Toe
+p3 1 0 9999.00 Othello
+p2 1 2 0.50 Othello
+p1 2 2 1.00 Othello
+p2222222222222222222222 3 1 3.00 Connect4
+p2222222222222 1 0 9999.00 Connect4
+p2 2 8 0.25 Connect4
+p1 10 6 1.67 Connect4
+sree 0 1 0.00 Connect4

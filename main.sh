@@ -1,17 +1,35 @@
-chkusr() { if cut -d " " -f1 users.tsv| grep -q "^$1$"  ; then           
-return 0 ;                                                                                                           
-else   read -p "This username doesn't exists . Do you want to register and update the users.tsv . If you want to register, please enter yes or else no : " regis
-    if [[ $regis == "yes" ]] ; then
-            register $1
-    else
-      exit
-    fi
-    return 1 ;
-fi
+chkusr() {
+    while true; do
+        username="$1"
+
+        if [[ "$username" =~ , ]]; then
+            echo -e "\e[31mUsername cannot contain comma\e[0m" >&2
+
+        elif [[ "$username" =~ [[:space:]] ]]; then
+            echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2
+
+        elif cut -d " " -f1 users.tsv | grep -q "^$username$"; then
+            echo "$username"
+            return 0
+
+        else
+            read -p "Username not found. Register? (yes/no): " regis
+            if [[ $regis == "yes" ]]; then
+                register "$username" >&2
+                echo "$username"
+                return 0
+            else
+                return 1
+            fi
+        fi
+
+        read -p $'\e[33mEnter username again: \e[0m' username
+        set -- "$username"
+    done
 }
 #register() function creates new user and it's password and stores it in users.tsv,password is hashed.
 register() {
-#      read -p "Please enter new username : " newuser
+ #     read -p "Please enter new username : " newuser
       while true
       do
       read -p "Set password : " newpass
@@ -24,7 +42,7 @@ register() {
       done
       hashpass=$(echo $newpass | sha256sum | cut -d " " -f 1)
       echo "$1 $hashpass" >> users.tsv
-       echo -e "\e[32m$user1 is now registered\e[0m"
+       echo -e "\e[32m$1 is now registered\e[0m"
       return 0;
 }
 #chkpass() function verifies the password entered.
@@ -42,18 +60,19 @@ done
 }
 
 read -p $'\e[33mPlayer 1 , Enter your username : \e[0m' user1
-chkusr $user1
-chkpass $user1
-while true
-do
-read -p $'\e[33mPlayer 2 , Enter your username : \e[0m' user2
-if [[ $user1 != $user2 ]] ;then
-     break
-else
- echo -e "\e[31mEnter different username\e[0m"
-fi
-done
-chkusr $user2
-chkpass $user2
+user1=$(chkusr "$user1") || exit 1
+chkpass "$user1"
+while true; do
+    read -p $'\e[33mPlayer 2 , Enter your username : \e[0m' user2
+    user2=$(chkusr "$user2") || exit 1
 
-python3 game.py $user1 $user2
+    if [[ "$user1" != "$user2" ]]; then
+        break
+    else
+        echo -e "\e[31mEnter different username\e[0m"
+    fi
+done
+
+chkpass "$user2"
+
+python3 game.py "$user1" "$user2"
