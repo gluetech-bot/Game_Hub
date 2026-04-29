@@ -79,6 +79,9 @@ class Connect4(BoardGame):
        
    
     # Drawing the game grid on the screen using Pygame
+    def is_full(self):
+      return np.all(self.board != 0)
+
     def draw_grid(self,screen):
         
         for i in range(ROWS + 1):
@@ -135,8 +138,10 @@ class Connect4(BoardGame):
             # If the winner's name is too long, scale down the text to fit within the popup
             font = pygame.font.SysFont("segoeui", 26, bold=True)
             box_width = 260
-            winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
-
+            if self.winner == 1 or self.winner == 2:
+             winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
+            if self.winner ==0:
+                winnner_text = font.render("Game is a Draw", True, (180, 240, 255))
             if winnner_text.get_width() > box_width:
                 scale_factor = box_width / winnner_text.get_width()
                 new_width = int(winnner_text.get_width() * scale_factor)
@@ -222,6 +227,9 @@ class Connect4(BoardGame):
                                     # Record the game result in the history.csv file with the winner's name, loser's name, date, and game name
                                     with open("history.csv", "a") as f:
                                         f.write(f"{winner},{loser},{now},Connect4\n")
+                                elif self.is_full():
+                                    self.game_over = True 
+                                    self.winner = 0  
                                 else:
                                     self.switch_turn()
                     # If the game is over, check if the user clicked on any of the leaderboard buttons and return the corresponding result

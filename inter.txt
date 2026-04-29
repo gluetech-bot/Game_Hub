@@ -1,6 +1,20 @@
+<<<<<<< HEAD
+k 1 2 0.50 Tic-Tac-Toe 0.50
+l 1 2 0.50 Tic-Tac-Toe 0.50
+sai 1 0 INFINITE Tic-Tac-Toe 999999.00
+s 3 2 1.50 Tic-Tac-Toe 1.50
+k 0 1 0.00 Othello 0.00
+s 1 0 INFINITE Othello 999999.00
+k 2 0 INFINITE Connect4 999999.00
+l 0 3 0.00 Connect4 0.00
+s 1 0 INFINITE Connect4 999999.00
+=======
 sreee 0 1 0.00 Tic-Tac-Toe 0.00
 sreevatsava12345 1 0 INFINITE Tic-Tac-Toe 999999.00
 shanmukhasai 0 1 0.00 Tic-Tac-Toe 0.00
 sree 1 0 INFINITE Tic-Tac-Toe 999999.00
+Player1 1 0 INFINITE Othello 999999.00
+Player2 0 1 0.00 Othello 0.00
+>>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
 Player1 1 1 1.00 Othello 1.00
 Player2 1 1 1.00 Othello 1.00

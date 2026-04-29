@@ -1,4 +1,5 @@
-#!/bin/bas
+#!/bin/bash
+              # Process history.csv and generate intermediate stats
 awk '
 BEGIN{ FS=","}
 {
@@ -21,49 +22,65 @@ for (g in cu){
         if(cl[g]!=0){printf "%s %d %d %.2f %s %.2f\n",g,cw[g],cl[g],cw[g]/cl[g],"Connect4",cw[g]/cl[g]}
         if(cl[g]==0){printf "%s %d %d %s %s %.2f\n",g,cw[g],cl[g],"INFINITE","Connect4",999999
 }}
-}' history.csv>inter.txt
+}' history.csv>inter.txt      # write processed data
 
-
+# ---------------- SORT BY WINS ----------------
 if [[ $1 == "wins" ]]; then
         sort -nr -k2 inter.txt>sorted.txt
         printf "Tic-Tac-Toe:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Tic-Tac-Toe")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
-
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        awk '{ if($5=="Tic-Tac-Toe")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
+       
+        printf "\n------------------------------\n\n"
+       
         printf "Othello:\n"
         printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Othello")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
-
+        awk '{ if($5=="Othello")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
+      
+        printf "\n------------------------------\n\n"
+       
         printf "Connect4:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
         awk '{ if($5=="Connect4")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
 
 fi
+# ---------------- SORT BY LOSSES ----------------
 if [[ $1 == "loss" ]]; then
         sort -n -k3 inter.txt>sorted.txt
         printf "Tic-Tac-Toe:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Tic-Tac-Toe")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        awk '{ if($5=="Tic-Tac-Toe")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
+       
+        printf "\n------------------------------\n\n"
+      
         printf "Othello:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Othello")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        awk '{ if($5=="Othello")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
+      
+        printf "\n------------------------------\n\n"
+
         printf "Connect4:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
         awk '{ if($5=="Connect4")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
 fi
+# ---------------- SORT BY RATIO ----------------
 if [[ $1 == "ratio" ]]; then
         sort -nr -k6 inter.txt>sorted.txt
         printf "Tic-Tac-Toe:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Tic-Tac-Toe")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
-
-         printf "Othello:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Othello")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
-
-         printf "Connect4:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Connect4")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        awk '{ if($5=="Tic-Tac-Toe")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
+        
+        printf "\n------------------------------\n\n"
+     
+        printf "Othello:\n"
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        awk '{ if($5=="Othello")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
+    
+        printf "\n------------------------------\n\n"
+        
+        printf "Connect4:\n"
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        awk '{ if($5=="Connect4")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
 fi        
         
 
