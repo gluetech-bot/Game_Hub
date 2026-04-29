@@ -147,9 +147,6 @@ def main():
     end_hover = pygame.Surface((325, 55), pygame.SRCALPHA)
     end_hover.fill((0, 0, 0, 100))   # hover for popup buttons
 
-    font = pygame.font.SysFont("segoeui", 28, bold=True)
-    title_font = pygame.font.SysFont("segoeui", 30, bold=True)
-
     running = True
 
     while running:
@@ -165,31 +162,11 @@ def main():
                 menu_scr.blit(end_hover, analysis_rect.topleft)
             elif exit_rect.collidepoint(mouse_pos):
                 menu_scr.blit(end_hover, exit_rect.topleft)
-            # pygame.draw.rect(menu_scr, (20, 20, 40), (140, 220, 440, 300), border_radius=20)
-            # pygame.draw.rect(menu_scr, (255, 255, 255), (140, 220, 440, 300), 3, border_radius=20)
-
-            # title = title_font.render("What do you want to do?", True, (255, 255, 255))
-            # menu_scr.blit(title, (190, 245))
-
-            # pygame.draw.rect(menu_scr, (40, 150, 80), play_again_rect, border_radius=10)
-            # pygame.draw.rect(menu_scr, (50, 100, 180), analysis_rect, border_radius=10)
-            # pygame.draw.rect(menu_scr, (180, 50, 50), exit_rect, border_radius=10)
-
-            # menu_scr.blit(font.render("Play Again", True, (255, 255, 255)),
-            #               (play_again_rect.x + 95, play_again_rect.y + 10))
-
-            # menu_scr.blit(font.render("Game Analysis", True, (255, 255, 255)),
-            #               (analysis_rect.x + 70, analysis_rect.y + 10))
-
-            # menu_scr.blit(font.render("Exit", True, (255, 255, 255)),
-            #               (exit_rect.x + 145, exit_rect.y + 10))
+            
 
         elif show_graph and graph_img is not None:
             menu_scr.blit(graph_img, (35, 180))   # show graph
 
-            # pygame.draw.rect(menu_scr, (200, 50, 50), gback_rect, border_radius=10)
-            # text = font.render("Back", True, (255, 255, 255))
-            # menu_scr.blit(text, (gback_rect.x + 20, gback_rect.y + 10))
             menu_scr.blit(back_btn, gback_rect.topleft)
             if gback_rect.collidepoint(mouse_pos):
                 menu_scr.blit(back_hover, gback_rect.topleft)
