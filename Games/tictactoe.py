@@ -121,35 +121,44 @@ class TicTacToe(BoardGame):
         def draw_popup(screen):
             screen_w, screen_h = 720, 720
             popup_w, popup_h = 450, 400
-            btn_w, btn_h = 400, 60
+            btn_w, btn_h = 295, 30
 
             popup_x = (screen_w - popup_w) // 2
             popup_y = (screen_h - popup_h) // 2
 
-            popup_rect = pygame.Rect(popup_x, popup_y, popup_w, popup_h)
+            leaderboard= pygame.image.load("./Images/tic_leaderboard.png")
+            leaderboard = pygame.transform.scale(leaderboard, (popup_w, popup_h))
+            screen.blit(leaderboard, (popup_x, popup_y))
+            pygame.draw.rect(screen, (255, 255, 255), (popup_x, popup_y, popup_w, popup_h), 5)
+            
+            wins_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 270, btn_w, btn_h)
+            loss_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 310, btn_w, btn_h)
+            ratio_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 350, btn_w, btn_h)
 
-            pygame.draw.rect(screen, (20, 20, 20), popup_rect, border_radius=15)
-            pygame.draw.rect(screen, (255, 255, 255), popup_rect, 2, border_radius=15)
-            h_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 10, btn_w, btn_h)
-            wins_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 80, btn_w, btn_h)
-            loss_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 160, btn_w, btn_h)
-            ratio_rect = pygame.Rect(popup_x + (popup_w - btn_w)//2, popup_y + 240, btn_w, btn_h)
-
+            hover_leader = pygame.Surface((btn_w, btn_h), pygame.SRCALPHA)
+            hover_leader.fill((0, 0, 0, 100))
+            
             font = pygame.font.SysFont("segoeui", 26, bold=True)
+            box_width = 260
+            winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
 
-            for rect, text in [
-                (h_rect, "How Do You Want Leaderboard"),
-                (wins_rect, "By Wins"),
-                (loss_rect, "By Losses"),
-                (ratio_rect, "By W/L Ratio")
-            ]:
-                pygame.draw.rect(screen, (50, 50, 50), rect, border_radius=10)
-                pygame.draw.rect(screen, (255, 255, 255), rect, 2, border_radius=10)
-
-                label = font.render(text, True, (255, 255, 255))
-                screen.blit(label, label.get_rect(center=rect.center))
-
-            return h_rect,wins_rect, loss_rect, ratio_rect
+            if winnner_text.get_width() > box_width:
+                scale_factor = box_width / winnner_text.get_width()
+                new_width = int(winnner_text.get_width() * scale_factor)
+                new_height = int(winnner_text.get_height() * scale_factor)
+                winnner_text = pygame.transform.smoothscale(winnner_text, (new_width, new_height))
+            screen.blit(winnner_text, (popup_x + 100, popup_y + 90))
+            
+            
+            if wins_rect.collidepoint(pygame.mouse.get_pos()):
+                screen.blit(hover_leader, wins_rect.topleft)
+            if loss_rect.collidepoint(pygame.mouse.get_pos()):
+                screen.blit(hover_leader, loss_rect.topleft)
+            if ratio_rect.collidepoint(pygame.mouse.get_pos()):
+                screen.blit(hover_leader, ratio_rect.topleft)
+            return wins_rect, loss_rect, ratio_rect
+        
+        
         reset_rect= pygame.Rect(135, 625, 215, 55)
         back_rect= pygame.Rect(375, 625, 215, 55)
         hover_surface = pygame.Surface((215, 55), pygame.SRCALPHA)
@@ -174,18 +183,21 @@ class TicTacToe(BoardGame):
             # acc.blit(text, text_rect)
             
             # glow layer
-            if not self.game_over:
-                glow = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (0, 220, 255))
-                acc.blit(glow, (210,130))
-                text = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (180, 240, 255)) 
-                acc.blit(text, (210, 130))
+            glow = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (0, 220, 255))
+            text = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (180, 240, 255)) 
+                
+            game_box = 300
+            if text.get_width() > game_box:
+                scale_factor = game_box / text.get_width()
+                new_width = int(text.get_width() * scale_factor)
+                new_height = int(text.get_height() * scale_factor)
+                text = pygame.transform.smoothscale(text, (new_width, new_height))
+                glow = pygame.transform.smoothscale(glow, (new_width, new_height))
+            acc.blit(glow, (210, 130))
+            acc.blit(text, (210, 130))
+            
             if self.game_over:
-                glow = f.render(self.player_names[self.winner] + " Wins", True, (0, 220, 255))
-                acc.blit(glow, (210,130))
-
-                text = f.render(self.player_names[self.winner] + " Wins", True, (180, 240, 255))
-                acc.blit(text, (210, 130))
-                h_rect, wins_rect, loss_rect, ratio_rect = draw_popup(acc)
+                wins_rect, loss_rect, ratio_rect = draw_popup(acc)
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
