@@ -1,12 +1,14 @@
-chkusr() {
+chkusr() {                 # chkusr() → checks if username is valid / exists / registers if needed
     while true; do
-        username="$1"
+        username="$1"      # take input username
 
         if [[ "$username" =~ , ]]; then
-            echo -e "\e[31mUsername cannot contain comma\e[0m" >&2
+            echo -e "\e[31mUsername cannot contain comma\e[0m" >&2    # reject comma
+
 
         elif [[ "$username" =~ [[:space:]] ]]; then
-            echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2
+            echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2   # reject spaces
+
 
         elif cut -d " " -f1 users.tsv | grep -q "^$username$"; then
             echo "$username"
@@ -19,7 +21,7 @@ chkusr() {
                 echo "$username"
                 return 0
             else
-                return 1
+                return 1     # exit if user declines
             fi
         fi
 
@@ -40,8 +42,8 @@ register() {
         echo "Passwords do not match"
       fi
       done
-      hashpass=$(echo $newpass | sha256sum | cut -d " " -f 1)
-      echo "$1 $hashpass" >> users.tsv
+      hashpass=$(echo $newpass | sha256sum | cut -d " " -f 1)   # hash password
+      echo "$1 $hashpass" >> users.tsv                           # store user + hash
        echo -e "\e[32m$1 is now registered\e[0m"
       return 0;
 }
@@ -49,8 +51,8 @@ register() {
 chkpass() {
 while true
 do
-read -p $'\e[33mEnter  password of "'$1$'": \e[0m' pass
-hashpass=$(echo $pass | sha256sum | cut -d " " -f 1)
+read -p $'\e[33mEnter  password of "'$1$'": \e[0m' pass     # input password
+hashpass=$(echo $pass | sha256sum | cut -d " " -f 1)       # hash it
 if [[ $hashpass == $(awk -v val="$1" 'val==$1{print $2}' users.tsv) ]] ; then
     return 0 ;
   else
@@ -60,14 +62,15 @@ done
 }
 
 read -p $'\e[33mPlayer 1 , Enter your username : \e[0m' user1
-user1=$(chkusr "$user1") || exit 1
-chkpass "$user1"
+user1=$(chkusr "$user1") || exit 1       # validate / register user1
+chkpass "$user1"                           # verify password
+
 while true; do
     read -p $'\e[33mPlayer 2 , Enter your username : \e[0m' user2
-    user2=$(chkusr "$user2") || exit 1
+    user2=$(chkusr "$user2") || exit 1        # validate user2
 
     if [[ "$user1" != "$user2" ]]; then
-        break
+        break                                    # ensure different users
     else
         echo -e "\e[31mEnter different username\e[0m"
     fi
@@ -75,4 +78,4 @@ done
 
 chkpass "$user2"
 
-python3 game.py "$user1" "$user2"
+python3 game.py "$user1" "$user2"   # launch game with usernames

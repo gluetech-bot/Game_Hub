@@ -77,7 +77,8 @@ class Connect4(BoardGame):
 
      return h_check or v_check or d_check
        
-   
+    def is_full(self):
+      return np.all(self.board != 0)
 
     def draw_grid(self,screen):
         
@@ -134,8 +135,10 @@ class Connect4(BoardGame):
             
             font = pygame.font.SysFont("segoeui", 26, bold=True)
             box_width = 260
-            winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
-
+            if self.winner == 1 or self.winner == 2:
+             winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
+            if self.winner ==0:
+                winnner_text = font.render("Game is a Draw", True, (180, 240, 255))
             if winnner_text.get_width() > box_width:
                 scale_factor = box_width / winnner_text.get_width()
                 new_width = int(winnner_text.get_width() * scale_factor)
@@ -224,6 +227,9 @@ class Connect4(BoardGame):
                                     
                                     with open("history.csv", "a") as f:
                                         f.write(f"{winner},{loser},{now},Connect4\n")
+                                elif self.is_full():
+                                    self.game_over = True 
+                                    self.winner = 0  
                                 else:
                                     self.switch_turn()
                     if self.game_over:

@@ -4,17 +4,17 @@ import pygame
 import os
 from numpy.lib.stride_tricks import sliding_window_view
 from datetime import datetime
-now = datetime.now().strftime("%Y-%m-%d")
+now = datetime.now().strftime("%Y-%m-%d")   # current date
 
 WIDTH, HEIGHT = 720, 720
 Board_Size = 360
 ROWS, COLS = 10, 10
-CELL_SIZE = Board_Size // COLS  # 36
+CELL_SIZE = Board_Size // COLS      # size of each cell
 OFFSET_X = 180 #(WIDTH - Board_Size) // 2   # center horizontally
 OFFSET_Y = 110 #(HEIGHT - Board_Size) // 2  # center vertically
 BLACK = (0, 0, 0)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(BASE_DIR, ".."))
+sys.path.append(os.path.join(BASE_DIR, ".."))            # allow parent imports
 
 from game import BoardGame
 
@@ -27,27 +27,30 @@ class TicTacToe(BoardGame):
         self.game_over = False
         self.winner         = None
         self.move_count     = 0
-        self.reset()
+        self.reset()                                       # reset game state
     def make_move(self, row, col):
-        if self.board[row][col] == 0:
+        if self.board[row][col] == 0:                       # valid move if cell empty
             return True
         else:
             return False
     def change_board(self,row,col):
-        self.board[row][col] = self.current_player
+        self.board[row][col] = self.current_player             # place move
     def reset(self):
-        self.board = np.zeros((self.size, self.size))
+        self.board = np.zeros((self.size, self.size))           # clear board
         self.current_player = 1
         self.game_over = False
         self.winner = None
-        
+    def is_full(self):
+     return np.all(self.board != 0)                              # check if board is full
+
+
     def check_win(self):
     
-     mask = (self.board == self.current_player)
+     mask = (self.board == self.current_player)               # positions of current player
 
     # --- Horizontal ---
-     h_windows = sliding_window_view(mask, (1, 5))
-     h_check = np.any(np.all(h_windows, axis=(2, 3)))
+     h_windows = sliding_window_view(mask, (1, 5))            # sliding window 1x5
+     h_check = np.any(np.all(h_windows, axis=(2, 3)))           # all 5 true
 
     # --- Vertical ---
      v_windows = sliding_window_view(mask, (5, 1))
@@ -58,7 +61,7 @@ class TicTacToe(BoardGame):
 
     # main diagonal
      main_diag = np.all(
-        np.diagonal(d_windows, axis1=2, axis2=3),
+        np.diagonal(d_windows, axis1=2, axis2=3),    
         axis=2
     )
 
@@ -70,22 +73,21 @@ class TicTacToe(BoardGame):
 
      d_check = np.any(main_diag) or np.any(anti_diag)
 
-     return h_check or v_check or d_check
-       
-   
+     return h_check or v_check or d_check         # win if any direction
 
+    
     def draw_grid(self,screen):
         
         for i in range(ROWS + 1):
         # horizontal
            pygame.draw.line(screen, (80, 140, 255),
             (OFFSET_X, 2*OFFSET_Y + i * CELL_SIZE),
-            (OFFSET_X + Board_Size, 2*OFFSET_Y + i * CELL_SIZE))
+            (OFFSET_X + Board_Size, 2*OFFSET_Y + i * CELL_SIZE))   # horizontal
 
         # vertical
            pygame.draw.line(screen,(80, 140, 255),
             (OFFSET_X + i * CELL_SIZE, 2*OFFSET_Y),
-            (OFFSET_X + i * CELL_SIZE,2*OFFSET_Y + Board_Size))
+            (OFFSET_X + i * CELL_SIZE,2*OFFSET_Y + Board_Size))      # vertical
     #def run_game(self,scr:pygame.Surface):
         #self.draw_grid(self,scr)
     def fill_board(self, screen):
@@ -114,16 +116,16 @@ class TicTacToe(BoardGame):
         pygame.init()
         pygame.display.set_caption("Tic Tac Toe")       
         bg_img = pygame.image.load("./Images/tic_bkgnd.png")
-        bg_img = pygame.transform.scale(bg_img, (720, 720))
+        bg_img = pygame.transform.scale(bg_img, (720, 720))   # resize background
         def draw(screen, a):
-            screen.blit(bg_img,(0,0))
-            a.draw_grid(screen)
+            screen.blit(bg_img,(0,0))      # draw background
+            a.draw_grid(screen)            # draw grid
         def draw_popup(screen):
             screen_w, screen_h = 720, 720
             popup_w, popup_h = 450, 400
             btn_w, btn_h = 295, 30
 
-            popup_x = (screen_w - popup_w) // 2
+            popup_x = (screen_w - popup_w) // 2            # center popup
             popup_y = (screen_h - popup_h) // 2
 
             leaderboard= pygame.image.load("./Images/tic_leaderboard.png")
@@ -137,11 +139,13 @@ class TicTacToe(BoardGame):
 
             hover_leader = pygame.Surface((btn_w, btn_h), pygame.SRCALPHA)
             hover_leader.fill((0, 0, 0, 100))
-            
+                                                                             #text on mainbar
             font = pygame.font.SysFont("segoeui", 26, bold=True)
             box_width = 260
-            winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
-
+            if self.winner == 1 or self.winner ==2:
+             winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
+            if self.winner ==0:
+                winnner_text = font.render("Game is a Draw ", True, (180, 240, 255)) 
             if winnner_text.get_width() > box_width:
                 scale_factor = box_width / winnner_text.get_width()
                 new_width = int(winnner_text.get_width() * scale_factor)
@@ -153,7 +157,7 @@ class TicTacToe(BoardGame):
             if wins_rect.collidepoint(pygame.mouse.get_pos()):
                 screen.blit(hover_leader, wins_rect.topleft)
             if loss_rect.collidepoint(pygame.mouse.get_pos()):
-                screen.blit(hover_leader, loss_rect.topleft)
+                screen.blit(hover_leader, loss_rect.topleft)              #hovering
             if ratio_rect.collidepoint(pygame.mouse.get_pos()):
                 screen.blit(hover_leader, ratio_rect.topleft)
             return wins_rect, loss_rect, ratio_rect
@@ -180,9 +184,9 @@ class TicTacToe(BoardGame):
                 acc.blit(hover_surface, reset_rect.topleft)
             if back_rect.collidepoint(mouse_pos):
                 acc.blit(hover_surface, back_rect.topleft)
-            # acc.blit(text, text_rect)
+           
             
-            # glow layer
+                                                                                                   # glow layer
             glow = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (0, 220, 255))
             text = f.render(self.player_names[self.current_player]+"'s turn"+" :", True, (180, 240, 255)) 
                 
@@ -202,14 +206,14 @@ class TicTacToe(BoardGame):
 
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    sys.exit()               #to go out of game
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if reset_rect.collidepoint(event.pos):
                         self.reset()
                         continue
 
-                    if back_rect.collidepoint(event.pos):
+                    if back_rect.collidepoint(event.pos):    #goback
                         return
 
                     if not self.game_over:
@@ -226,14 +230,17 @@ class TicTacToe(BoardGame):
                                     loser = self.player_names[2 if self.current_player == 1 else 1]
                                     self.winner = self.current_player
                                     
-                                    with open("history.csv", "a") as f:
-                                        f.write(f"{winner},{loser},{now},Tic-Tac-Toe\n")
+                                    with open("history.csv", "a") as f:                     #appending result to history.csv
+                                        f.write(f"{winner},{loser},{now},Tic-Tac-Toe\n")  
+                                elif self.is_full():
+                                    self.game_over = True 
+                                    self.winner = 0      
                                 else:
                                      self.switch_turn()
 
                     if self.game_over:
                        
-                       if wins_rect is not None and wins_rect.collidepoint(event.pos):
+                       if wins_rect is not None and wins_rect.collidepoint(event.pos):    #arguments for leaderboard.sh
                            return "wins"
                        if loss_rect is not None and loss_rect.collidepoint(event.pos):
                            return "loss"

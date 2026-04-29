@@ -87,3 +87,13 @@ p1,p2,2026-04-29,Othello
 p1,p2,2026-04-29,Othello
 sreevatsava12345,shanmukhasai,2026-04-29,Tic-Tac-Toe
 sreevatsava123456789,shanmukhasai,2026-04-29,Tic-Tac-Toe
+l,s,2026-04-29,Tic-Tac-Toe
+s,l,2026-04-29,Tic-Tac-Toe
+k,l,2026-04-29,Connect4
+k,l,2026-04-29,Tic-Tac-Toe
+k,l,2026-04-29,Connect4
+s,k,2026-04-29,Tic-Tac-Toe
+s,l,2026-04-29,Connect4
+s,k,2026-04-29,Othello
+s,k,2026-04-29,Tic-Tac-Toe
+sai,s,2026-04-29,Tic-Tac-Toe
