@@ -1,28 +1,6 @@
-<<<<<<< HEAD
-sai 18 6 3.00 Tic-Tac-Toe 3.00
-s 16 29 0.55 Tic-Tac-Toe 0.55
-j 12 7 1.71 Tic-Tac-Toe 1.71
-j 5 0 INFINITE Connect4 999999.00
-a 2 2 1.00 Tic-Tac-Toe 1.00
-s 1 6 0.17 Connect4 0.17
-f 1 0 INFINITE Connect4 999999.00
-d 1 4 0.25 Tic-Tac-Toe 0.25
-c 0 1 0.00 Tic-Tac-Toe 0.00
-a 0 1 0.00 Connect4 0.00
-=======
-p1 10 6 1.67 Connect4
-p1 6 1 6.00 Tic-Tac-Toe
-p2222222222222222222222 3 1 3.00 Connect4
-p2 2 8 0.25 Connect4
-p1 2 2 1.00 Othello
-sreevatsava123456789 1 0 9999.00 Tic-Tac-Toe
-sreevatsava12345 1 0 9999.00 Tic-Tac-Toe
-sree 1 0 9999.00 Tic-Tac-Toe
-p3 1 0 9999.00 Othello
-p2222222222222 1 0 9999.00 Connect4
-p2 1 2 0.50 Othello
-sree 0 1 0.00 Connect4
-shanmukhasai 0 2 0.00 Tic-Tac-Toe
-p3 0 2 0.00 Tic-Tac-Toe
-p2 0 4 0.00 Tic-Tac-Toe
->>>>>>> f16fafd4f5e3626c9bd800e8feef5aa971b68379
+sreevatsava12345 1 0 INFINITE Tic-Tac-Toe 999999.00
+sree 1 0 INFINITE Tic-Tac-Toe 999999.00
+Player1 1 0 INFINITE Othello 999999.00
+sreee 0 1 0.00 Tic-Tac-Toe 0.00
+shanmukhasai 0 1 0.00 Tic-Tac-Toe 0.00
+Player2 0 1 0.00 Othello 0.00
