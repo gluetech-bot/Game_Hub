@@ -34,14 +34,14 @@ if [[ $1 == "wins" ]]; then
         printf "\n------------------------------\n\n"
        
         printf "Othello:\n"
-        printf "%-10s %-10s %-10s %-10s\n" "UserName" "Wins" "Loses" "w/l ratio"
+        printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
         awk '{ if($5=="Othello")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
       
         printf "\n------------------------------\n\n"
        
         printf "Connect4:\n"
         printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Connect4")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
+        awk '{ if($5=="Connect4")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
 
 fi
 # ---------------- SORT BY LOSSES ----------------
@@ -61,7 +61,7 @@ if [[ $1 == "loss" ]]; then
 
         printf "Connect4:\n"
         printf "%-20s %-20s %-20s %-20s\n" "UserName" "Wins" "Loses" "w/l ratio"
-        awk '{ if($5=="Connect4")printf "%-10s %-10s %-10s %-10s\n",$1,$2,$3,$4} ' sorted.txt
+        awk '{ if($5=="Connect4")printf "%-20s %-20s %-20s %-20s\n",$1,$2,$3,$4} ' sorted.txt
 fi
 # ---------------- SORT BY RATIO ----------------
 if [[ $1 == "ratio" ]]; then
