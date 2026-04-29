@@ -1,13 +1,12 @@
-chkusr() {                 # chkusr() → checks if username is valid / exists / registers if needed
+chkusr() {
     while true; do
-        username="$1"      # take input username
+        username="$1"
 
         if [[ "$username" =~ , ]]; then
-            echo -e "\e[31mUsername cannot contain comma\e[0m" >&2    # reject comma
-
+            echo -e "\e[31mUsername cannot contain comma\e[0m" >&2
 
         elif [[ "$username" =~ [[:space:]] ]]; then
-            echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2   # reject spaces
+            echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2
 
         elif cut -d " " -f1 users.tsv | grep -q "^$username$"; then
             echo "$username"
