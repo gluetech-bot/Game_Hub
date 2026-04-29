@@ -1,11 +1,2 @@
-sreee 0 1 0.00 Tic-Tac-Toe 0.00
-sree 1 0 INFINITE Tic-Tac-Toe 999999.00
-sreee 0 1 0.00 Connect4 0.00
-sree 1 0 INFINITE Connect4 999999.00
-sai 2 1 2.00 Tic-Tac-Toe 2.00
-s 1 2 0.50 Tic-Tac-Toe 0.50
-sai 0 1 0.00 Othello 0.00
-s 1 0 INFINITE Othello 999999.00
-h 0 1 0.00 Connect4 0.00
-sai 1 1 1.00 Connect4 1.00
-s 1 1 1.00 Connect4 1.00
+h 0 4 0.00 Tic-Tac-Toe 0.00
+sree 4 0 INFINITE Tic-Tac-Toe 999999.00
