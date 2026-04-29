@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 from numpy.lib.stride_tricks import sliding_window_view
 now = datetime.now().strftime("%Y-%m-%d")
-# import game
+# Setting up constants for the game
 WIDTH, HEIGHT = 720, 720
 Board_Size = 352
 ROWS, COLS = 8, 8
@@ -18,6 +18,7 @@ sys.path.append(os.path.join(BASE_DIR, ".."))
 
 from game import BoardGame
 
+# Inhering from the BoardGame class to implement Othello
 class Othello(BoardGame):
     def __init__(self, player1, player2):
         self.size = 8
@@ -28,15 +29,8 @@ class Othello(BoardGame):
         self.winner         = None
         self.move_count     = 0
         self.reset()
-    # def make_move(self, row, col):
-    #     if self.board[row][col] == 0:
-    #         return True
-    #     else:
-    #         return False
-        
-    # def change_board(self,row,col):
-    #     self.board[row][col] = self.current_player
-         
+
+  # Resets the game to the initial state       
     def reset(self):
         self.board = np.zeros((self.size, self.size))
         self.board[3][3] = 2
@@ -46,7 +40,7 @@ class Othello(BoardGame):
         self.current_player = 1
         self.game_over = False
         self.winner = None
-        
+    # Checks if the game has been won by either player or if it's a draw
     def check_win(self):
         valid_moves = self.get_valid_moves()
 
@@ -76,7 +70,7 @@ class Othello(BoardGame):
             self.winner = 0
 
         return True
-
+    # Returns a list of valid moves for the current player
     def get_valid_moves(self):
         valid_moves = []
         for row in range(self.size):
@@ -84,7 +78,7 @@ class Othello(BoardGame):
                 if self.board[row][col] == 0 and self.is_valid_move(row, col):
                     valid_moves.append((row, col))
         return valid_moves
-    
+    # Draws circles around valid moves on the board
     def draw_valid_moves(self,screen):
         valid_moves = self.get_valid_moves()
         for row, col in valid_moves:
@@ -93,13 +87,13 @@ class Othello(BoardGame):
             else:
                 pygame.draw.circle(screen, (255, 255, 255), (OFFSET_X + CELL_SIZE * (col + 0.5), 2 * OFFSET_Y + CELL_SIZE * (row + 0.5)), 17, 2)
         
-    
+    # Checks if placing a piece at the given position is a valid move for the current player
     def is_valid_move(self, row, col):
         opponent = 2 if self.current_player == 1 else 1
         directions = [(-1, -1), (-1, 0), (-1, 1),
                       (0, -1),          (0, 1),
                       (1, -1), (1, 0), (1, 1)]
-        
+        # (from a empty tile)check if there is an opponent piece in the direction and then a current player piece, then it's a valid move
         for dr, dc in directions:
             r, c = row + dr, col + dc
             has_opponent_piece = False
@@ -118,7 +112,7 @@ class Othello(BoardGame):
         
         return False
     
-    
+    # Flips the opponent's pieces in all valid directions after a move is made
     def flip_pieces(self, row, col):
         opponent = 2 if self.current_player == 1 else 1
         directions = [(-1, -1), (-1, 0), (-1, 1),
@@ -140,6 +134,7 @@ class Othello(BoardGame):
                     break
                 r += dr
                 c += dc
+    # When a player makes a move, this function updates the board, flips the opponent's pieces, and checks if the move is valid
     def make_move(self, row, col):
         if self.board[row][col] == 0 and self.is_valid_move(row, col):
             self.board[row][col] = self.current_player
@@ -147,7 +142,7 @@ class Othello(BoardGame):
             return True
         return False
      
-    
+    # Draws the game board and pieces on the screen using Pygame
     def draw_grid(self,screen):
         
         board_color = (0, 128, 0)  # Green background
@@ -163,7 +158,7 @@ class Othello(BoardGame):
            pygame.draw.line(screen,(0,0,0),
             (OFFSET_X + i * CELL_SIZE, 2*OFFSET_Y),
             (OFFSET_X + i * CELL_SIZE,2*OFFSET_Y + Board_Size))
-
+    # Fills the board with the current pieces based on the state of the board array
     def fill_board(self,screen):
         for i in range(ROWS):
             for j in range(COLS):
@@ -172,12 +167,14 @@ class Othello(BoardGame):
                      
                 if self.board[i][j] == 2:
                     pygame.draw.circle(screen, (255, 255, 255),(OFFSET_X+CELL_SIZE*(j+0.5),2*OFFSET_Y+CELL_SIZE*(i+0.5)),17)
-
+    # Main game loop that handles user input, updates the game state, and renders the game board and pieces on the screen
     def run_othello(self):
         pygame.init()
         pygame.display.set_caption("Othello")
-        bg_img = pygame.image.load("./Images/othello_bkgnd.png")   # your image file
+        # the image file
+        bg_img = pygame.image.load("./Images/othello_bkgnd.png")   
         bg_img = pygame.transform.scale(bg_img, (720, 720))
+        
         def draw(screen, a):
             screen.blit(bg_img,(0,0))
             a.draw_grid(screen)
@@ -185,7 +182,7 @@ class Othello(BoardGame):
             screen_w, screen_h = 720, 720
             popup_w, popup_h = 450, 400
             btn_w, btn_h = 295, 30
-
+        # Creating the buttons for the popup and centering the popup on the screen
             popup_x = (screen_w - popup_w) // 2
             popup_y = (screen_h - popup_h) // 2
 
@@ -200,10 +197,13 @@ class Othello(BoardGame):
 
             hover_leader = pygame.Surface((btn_w, btn_h), pygame.SRCALPHA)
             hover_leader.fill((0, 0, 0, 100))
-            
+            # If the winner's name is too long, scale down the text to fit within the popup
             font = pygame.font.SysFont("segoeui", 26, bold=True)
             box_width = 260
-            winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
+            if self.winner == 0:
+                winnner_text = font.render("It's a DRAW!", True, (180, 240, 255))
+            else:
+                winnner_text = font.render(self.player_names[self.winner]+"'s VICTORY!", True, (180, 240, 255))
 
             if winnner_text.get_width() > box_width:
                 scale_factor = box_width / winnner_text.get_width()
@@ -242,7 +242,7 @@ class Othello(BoardGame):
             player2_score = np.sum(self.board == 2)
             
             
-            
+            # If the score text is too wide, scale it down to fit within the designated area
             glow = f.render("Black:"+str(player1_score)+", White:"+str(player2_score), True, (0, 220, 255))
             text = f.render("Black:"+str(player1_score)+", White:"+str(player2_score), True, (180, 240, 255)) 
             
@@ -255,7 +255,7 @@ class Othello(BoardGame):
                 glow = pygame.transform.smoothscale(glow, (new_width, new_height))
             acc.blit(glow, (210, 130))
             acc.blit(text, (210, 130))
-            
+            # If the game is over, draw the popup with the winner's name and leaderboard buttons
             if self.game_over:
                 wins_rect, loss_rect, ratio_rect = draw_popup(acc)
             if reset_rect.collidepoint(mouse_pos):
@@ -283,7 +283,7 @@ class Othello(BoardGame):
                     if not self.game_over:
                         col = (event.pos[0] - OFFSET_X) // CELL_SIZE
                         row = (event.pos[1] - 2 * OFFSET_Y) // CELL_SIZE
-
+                        # Check if the click is within the board boundaries
                         if 0 <= row < ROWS and 0 <= col < COLS:
                             if self.make_move(row, col):
                                 self.switch_turn()
@@ -293,12 +293,14 @@ class Othello(BoardGame):
 
                                     if not self.get_valid_moves():
                                        if self.check_win():
-                                           winner = self.player_names[self.current_player]
-                                           loser = self.player_names[2 if self.current_player == 1 else 1]
-                                           self.winner = self.current_player
-                                    
-                                           with open("history.csv", "a") as f:
-                                            f.write(f"{winner},{loser},{now},Othello\n")
+                                            if self.winner != 0:
+                                                winner = self.player_names[self.current_player]
+                                                loser = self.player_names[2 if self.current_player == 1 else 1]
+                                                self.winner = self.current_player
+                                                    # Record the game result in the history.csv file with the winner's name, loser's name, date, and game name
+                                                with open("history.csv", "a") as f:
+                                                    f.write(f"{winner},{loser},{now},Othello\n")
+                    # If the game is over, check if the user clicked on any of the leaderboard buttons and return the corresponding result
                     if self.game_over:
                        
                        if wins_rect is not None and wins_rect.collidepoint(event.pos):

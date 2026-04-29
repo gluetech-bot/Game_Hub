@@ -2,5 +2,5 @@ sreee 0 1 0.00 Tic-Tac-Toe 0.00
 sreevatsava12345 1 0 INFINITE Tic-Tac-Toe 999999.00
 shanmukhasai 0 1 0.00 Tic-Tac-Toe 0.00
 sree 1 0 INFINITE Tic-Tac-Toe 999999.00
-Player1 1 0 INFINITE Othello 999999.00
-Player2 0 1 0.00 Othello 0.00
+Player1 1 1 1.00 Othello 1.00
+Player2 1 1 1.00 Othello 1.00

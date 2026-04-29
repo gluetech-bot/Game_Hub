@@ -16,13 +16,26 @@ from a menu, play via a graphical interface, and have their results recorded on 
 ---
 
 ## Table of Contents
-1. [Introduction]
-2. [Navigation] 
+1. Introduction
+2. Prerequisites
+3. Modules Required
+4. Navigation
 
 ---
 
 ## Prerequisites
+- python 3.13 or higher
+- pygame-ce
 
+---
+## Modules Required
+- pygame
+- numpy
+- matplotlib
+- sys 
+- os 
+- subprocess
+- pathlib
 
 ---
 ## Navigation
@@ -39,3 +52,5 @@ from a menu, play via a graphical interface, and have their results recorded on 
 - Use **Reset** button to restart the current game
 - Hover over buttons for visual feedback
 ---
+## Leaderboard
+After the game,we prompt for the Leaderboard,by the choice of player we print leaderboard.Then we print graphs on how many times was game was played,top player of the games.
