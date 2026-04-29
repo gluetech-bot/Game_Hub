@@ -87,7 +87,6 @@ p1,p2,2026-04-29,Othello
 p1,p2,2026-04-29,Othello
 sreevatsava12345,shanmukhasai,2026-04-29,Tic-Tac-Toe
 sreevatsava123456789,shanmukhasai,2026-04-29,Tic-Tac-Toe
-<<<<<<< HEAD
 l,s,2026-04-29,Tic-Tac-Toe
 s,l,2026-04-29,Tic-Tac-Toe
 k,l,2026-04-29,Connect4
@@ -98,8 +97,14 @@ s,l,2026-04-29,Connect4
 s,k,2026-04-29,Othello
 s,k,2026-04-29,Tic-Tac-Toe
 sai,s,2026-04-29,Tic-Tac-Toe
-=======
 sree,sreee,2026-04-29,Tic-Tac-Toe
 sreevatsava12345,shanmukhasai,2026-04-29,Tic-Tac-Toe
 Player1,Player2,2026-04-29,Othello
->>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
+sai,s,2026-04-29,Tic-Tac-Toe
+s,sai,2026-04-29,Tic-Tac-Toe
+sai,s,2026-04-29,Connect4
+sree,h,2026-04-29,Connect4
+sai,s,2026-04-29,Tic-Tac-Toe
+sai,s,2026-04-29,Tic-Tac-Toe
+s,sai,2026-04-29,Connect4
+s,sai,2026-04-29,Othello

@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-chkusr() {                 # chkusr() → checks if username is valid / exists / registers if needed
-    while true; do
-        username="$1"      # take input username
-
-        if [[ "$username" =~ , ]]; then
-            echo -e "\e[31mUsername cannot contain comma\e[0m" >&2    # reject comma
-
-
-        elif [[ "$username" =~ [[:space:]] ]]; then
-            echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2   # reject spaces
-
-=======
 chkusr() {
     while true; do
         username="$1"
@@ -20,7 +7,6 @@ chkusr() {
 
         elif [[ "$username" =~ [[:space:]] ]]; then
             echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2
->>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
 
         elif cut -d " " -f1 users.tsv | grep -q "^$username$"; then
             echo "$username"
@@ -33,11 +19,7 @@ chkusr() {
                 echo "$username"
                 return 0
             else
-<<<<<<< HEAD
                 return 1     # exit if user declines
-=======
-                return 1
->>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
             fi
         fi
 
@@ -58,13 +40,8 @@ register() {
         echo "Passwords do not match"
       fi
       done
-<<<<<<< HEAD
       hashpass=$(echo $newpass | sha256sum | cut -d " " -f 1)   # hash password
       echo "$1 $hashpass" >> users.tsv                           # store user + hash
-=======
-      hashpass=$(echo $newpass | sha256sum | cut -d " " -f 1)
-      echo "$1 $hashpass" >> users.tsv
->>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
        echo -e "\e[32m$1 is now registered\e[0m"
       return 0;
 }
@@ -72,13 +49,8 @@ register() {
 chkpass() {
 while true
 do
-<<<<<<< HEAD
 read -p $'\e[33mEnter  password of "'$1$'": \e[0m' pass     # input password
 hashpass=$(echo $pass | sha256sum | cut -d " " -f 1)       # hash it
-=======
-read -p $'\e[33mEnter  password of "'$1$'": \e[0m' pass
-hashpass=$(echo $pass | sha256sum | cut -d " " -f 1)
->>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
 if [[ $hashpass == $(awk -v val="$1" 'val==$1{print $2}' users.tsv) ]] ; then
     return 0 ;
   else
@@ -88,7 +60,6 @@ done
 }
 
 read -p $'\e[33mPlayer 1 , Enter your username : \e[0m' user1
-<<<<<<< HEAD
 user1=$(chkusr "$user1") || exit 1       # validate / register user1
 chkpass "$user1"                           # verify password
 
@@ -98,16 +69,6 @@ while true; do
 
     if [[ "$user1" != "$user2" ]]; then
         break                                    # ensure different users
-=======
-user1=$(chkusr "$user1") || exit 1
-chkpass "$user1"
-while true; do
-    read -p $'\e[33mPlayer 2 , Enter your username : \e[0m' user2
-    user2=$(chkusr "$user2") || exit 1
-
-    if [[ "$user1" != "$user2" ]]; then
-        break
->>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
     else
         echo -e "\e[31mEnter different username\e[0m"
     fi
@@ -115,8 +76,4 @@ done
 
 chkpass "$user2"
 
-<<<<<<< HEAD
 python3 game.py "$user1" "$user2"   # launch game with usernames
-=======
-python3 game.py "$user1" "$user2"
->>>>>>> c6b1f7239c38d2591eea1de700ae844572b63f7e
