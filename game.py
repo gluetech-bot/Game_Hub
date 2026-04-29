@@ -3,6 +3,7 @@ import numpy as np
 import pygame
 import subprocess
 from pygame.locals import *
+import matplotlib.pyplot as plt
 # from Games.tictactoe import TicTacToe
 # creating a class for players
 class BoardGame:
@@ -36,22 +37,63 @@ class BoardGame:
     def get_font(self, size: int, bold: bool = False) -> pygame.font.Font:  ####
         return pygame.font.SysFont("segoeui", size, bold=bold)
 
+def Gamehub_analysis():
+    t_count,c_count,o_count =0,0,0
+    users = {}
+    with open("inter.txt", "r") as f:
+     for line in f:
+        parts = line.strip().split()
+        if parts[4] == "Tic-Tac-Toe":
+            t_count += 1
+            if parts[0] not in users:
+                users[parts[0]]=0      
+            users[parts[0]] += int(parts[1])
+        if parts[4] == "Connect4":
+            c_count += 1
+            if parts[0] not in users:
+                users[parts[0]]=0      
+            users[parts[0]] += int(parts[1])
+        if parts[4] == "Othello":
+            o_count += 1
+            if parts[0] not in users:
+                users[parts[0]]=0      
+            users[parts[0]] += int(parts[1])
+    label = ['Tictactoe','Connect4','Othello']
+    value = [t_count,c_count,o_count]
+    plt.subplot(1,2,1)
+    plt.pie(value,labels=label,autopct='%1.1f%%')
+    plt.title("Proportion of Games Played")
+    plt.axis('equal')
+    plt.subplot(1,2,2)
+    top5 = sorted(users.items(),key=lambda x: x[1],reverse=True)[:5]
+    labels = [x[0] for x in top5]
+    values = [x[1] for x in top5]
+    plt.bar(labels,values)
+    plt.title("Top 5 Winners")
+    plt.xlabel("Players")
+    plt.ylabel("No.Of wins")
+    plt.show()
+    #plt.pause(20)
+    #plt.close()
 # game.py
 def start_tic():
     from Games.tictactoe import TicTacToe   
     game = TicTacToe(p1, p2)
     con = game.run_tic()
     subprocess.run(["bash","leaderboard.sh",str(con)])
+    Gamehub_analysis()
 def start_connect4():
     from Games.connect4 import Connect4  
     game = Connect4(p1, p2)
     con = game.run_connect4() 
     subprocess.run(["bash","leaderboard.sh",str(con)])
+    Gamehub_analysis()
 def start_othello():
     from Games.othello import Othello  
     game = Othello(p1, p2)
     con = game.run_othello()
     subprocess.run(["bash","leaderboard.sh",str(con)])
+    Gamehub_analysis()
 p1=sys.argv[1]
 p2=sys.argv[2]
 

@@ -1,6 +1,6 @@
 chkusr() { if cut -d " " -f1 users.tsv| grep -q "^$1$"  ; then           
 return 0 ;                                                                                                           
-else   read -p "This username doesn't exists . Do you want to register and update the users.tsv . If you want to , please enter yes or else no : " regis
+else   read -p "This username doesn't exists . Do you want to register and update the users.tsv . If you want to register, please enter yes or else no : " regis
     if [[ $regis == "yes" ]] ; then
             register $1
     else
