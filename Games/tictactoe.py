@@ -229,9 +229,9 @@ class TicTacToe(BoardGame):
                                     winner = self.player_names[self.current_player]
                                     loser = self.player_names[2 if self.current_player == 1 else 1]
                                     self.winner = self.current_player
-                                    
-                                    with open("history.csv", "a") as f:                     #appending result to history.csv
-                                        f.write(f"{winner},{loser},{now},Tic-Tac-Toe\n")  
+                                    if winner != "guest" and loser != "guest" :    
+                                        with open("history.csv", "a") as f:                     #appending result to history.csv
+                                            f.write(f"{winner},{loser},{now},Tic-Tac-Toe\n")  
                                 elif self.is_full():
                                     self.game_over = True 
                                     self.winner = 0      

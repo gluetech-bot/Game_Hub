@@ -293,15 +293,15 @@ class Othello(BoardGame):
 
                                     if not self.get_valid_moves():
                                        if self.check_win():
-                                           if self.winner ==1:
+                                            if self.winner ==1:
                                                 winner = self.player_names[1]
                                                 loser = self.player_names[2]
-                                           elif self.winner ==2:
+                                            elif self.winner ==2:
                                                     winner = self.player_names[2]
                                                     loser = self.player_names[1]
-                                    
-                                           with open("history.csv", "a") as f:
-                                            f.write(f"{winner},{loser},{now},Othello\n")
+                                            if winner != "guest" and loser != "guest" :
+                                                    with open("history.csv", "a") as f:
+                                                        f.write(f"{winner},{loser},{now},Othello\n")
                     if self.game_over:
                        
                        if wins_rect is not None and wins_rect.collidepoint(event.pos):

@@ -225,8 +225,9 @@ class Connect4(BoardGame):
                                     loser = self.player_names[2 if self.current_player == 1 else 1]
                                     self.winner = self.current_player
                                     # Record the game result in the history.csv file with the winner's name, loser's name, date, and game name
-                                    with open("history.csv", "a") as f:
-                                        f.write(f"{winner},{loser},{now},Connect4\n")
+                                    if winner != "guest" and loser != "guest" :
+                                        with open("history.csv", "a") as f:
+                                            f.write(f"{winner},{loser},{now},Connect4\n")
                                 elif self.is_full():
                                     self.game_over = True 
                                     self.winner = 0  

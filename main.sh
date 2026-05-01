@@ -8,6 +8,10 @@ chkusr() {
         elif [[ "$username" =~ [[:space:]] ]]; then
             echo -e "\e[31mUsername cannot contain whitespace\e[0m" >&2
 
+        elif [[ "$username" == "guest" ]]; then
+            echo "guest"
+            return 0
+
         elif cut -d " " -f1 users.tsv | grep -q "^$username$"; then
             echo "$username"
             return 0
@@ -61,19 +65,22 @@ done
 
 read -p $'\e[33mPlayer 1 , Enter your username : \e[0m' user1
 user1=$(chkusr "$user1") || exit 1       # validate / register user1
-chkpass "$user1"                           # verify password
-
+if [[ $user1 != "guest" ]]; then
+    chkpass "$user1"                           # verify password
+fi
 while true; do
     read -p $'\e[33mPlayer 2 , Enter your username : \e[0m' user2
     user2=$(chkusr "$user2") || exit 1        # validate user2
 
-    if [[ "$user1" != "$user2" ]]; then
+    if [[ $user2 == "guest" ]]; then
+        break                          
+    elif [[ "$user1" != "$user2" ]]; then
         break                                    # ensure different users
     else
         echo -e "\e[31mEnter different username\e[0m"
     fi
 done
-
-chkpass "$user2"
-
+if [[ "$user2" != "guest" ]]; then
+    chkpass "$user2"
+fi
 python3 game.py "$user1" "$user2"   # launch game with usernames
